@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const EslingPlugin = require('eslint-webpack-plugin');
 
 const mode = process.env.NODE_ENV || 'development';
 const devMode = mode === 'development';
@@ -34,7 +33,6 @@ module.exports = {
     new CopyPlugin({
       patterns: [{ from: './src/assets', to: './assets' }],
     }),
-    new EslingPlugin({ extensions: 'ts' }),
   ],
   resolve: {
     extensions: ['.js', '.ts'],
@@ -72,35 +70,6 @@ module.exports = {
         generator: {
           filename: 'fonts/[name][ext]',
         },
-      },
-      {
-        test: /\.(jpe?g|png|webp|gif|svg)$/i,
-        use: [
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              mozjpeg: {
-                progressive: true,
-              },
-              // optipng.enabled: false will disable optipng
-              optipng: {
-                enabled: false,
-              },
-              pngquant: {
-                quality: [0.65, 0.9],
-                speed: 4,
-              },
-              gifsicle: {
-                interlaced: false,
-              },
-              // the webp option will enable WEBP
-              webp: {
-                quality: 75,
-              },
-            },
-          },
-        ],
-        type: 'asset/resource',
       },
       {
         test: /\.m?js$/i,
