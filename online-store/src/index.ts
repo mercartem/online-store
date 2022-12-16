@@ -1,4 +1,7 @@
 import './scss/app.scss';
+import './views/components/Header/header.scss';
+import './views/components/Footer/footer.scss';
+
 import HomeScreen from './views/pages/Main/HomeScreen';
 
 const router = () => {

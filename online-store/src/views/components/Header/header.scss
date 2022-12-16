@@ -1,0 +1,90 @@
+.header {
+  position: relative;
+  width: 100%;
+  min-height: 80px;
+  background-color: var(--dark-color);
+  z-index: 20;
+
+  &__container {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  &__body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @media screen and (max-width: 991px) {
+      padding: 0 2rem;
+    }
+  }
+
+  &__main {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.logo {
+  height: 5rem;
+  // width: 10.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    font-weight: 700;
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+    color: var(--white-color);
+  }
+}
+
+.cart-header {
+  position: relative;
+
+  &__count {
+    position: absolute;
+    top: -0.5rem;
+    right: -1rem;
+    background-color: var(--red-color);
+    border-radius: 10rem;
+    padding: 0 0.7rem;
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.actions-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+
+  &__icon {
+    display: block;
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  &__sum {
+    position: absolute;
+    bottom: 0.5rem;
+    span {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+  }
+}
+
+.menu-nav__link {
+  transition: color 0.35s ease;
+
+  &:hover {
+    color: var(--red-color);
+  }
+}
