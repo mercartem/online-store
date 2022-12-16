@@ -2,7 +2,11 @@
 @import 'variables';
 @import 'libs/normalize';
 
-@import '../views/pages/Main/HomeScreen.scss';
+@import '../views/pages/Main/homeScreen.scss';
+@import '../views/pages/NotFound/error404Screen.scss';
+
+@import '../views/components/Header/header.scss';
+@import '../views/components/Footer/footer.scss';
 
 *,
 *::before,
@@ -67,6 +71,11 @@ img {
   @media screen and (max-width: 991px) {
     padding: 0 2rem;
   }
+}
+
+.main__container {
+  display: flex;
+  justify-content: center;
 }
 
 .font_XXL {
