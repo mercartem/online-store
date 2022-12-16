@@ -1,15 +1,11 @@
 .error {
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  img {
-    flex: 0.6;
-  }
+  align-items: center;
+  justify-content: space-between;
 }
 
 .error__info {
-  flex: 0.4;
   padding: 5rem 0;
 }
 
