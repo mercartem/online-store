@@ -73,7 +73,7 @@ const products: Data = [
     stock: 45,
     brand: 'FC Dynamo',
     category: 'scarves',
-    thumbnail: '../assets/img/products5-1.png',
+    thumbnail: '../assets/img/products-5-1.png',
     images: ['../assets/img/products-5-1.png', '../assets/img/products-5-2.png', '../assets/img/products-5-3.png'],
   },
   {
