@@ -2,6 +2,8 @@
 @import 'variables';
 @import 'libs/normalize';
 
+@import '../views/pages/Main/HomeScreen.scss';
+
 *,
 *::before,
 *::after {
@@ -116,7 +118,7 @@ img {
   }
 }
 
-.font_XSS {
+.font_XXS {
   font-size: 1.3rem;
   line-height: 1.8rem;
 }

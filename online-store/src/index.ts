@@ -1,5 +1,10 @@
-import products from './constans/data';
+import './scss/app.scss';
+import HomeScreen from './views/pages/Main/HomeScreen';
 
-const a = document.querySelector('.aaa') as HTMLElement;
+const router = () => {
+  const main = document.querySelector('.main-container') as HTMLElement;
+  const homeScreen: HomeScreen = new HomeScreen();
+  main.innerHTML = homeScreen.render();
+};
 
-a.innerHTML = `<img src=${products[5].thumbnail}/><div>${products[5].title}</div>`;
+window.addEventListener('load', router);
