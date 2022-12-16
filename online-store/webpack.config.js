@@ -19,7 +19,6 @@ module.exports = {
   entry: ['@babel/polyfill', path.resolve(__dirname, 'src', 'index.ts')],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    clean: true,
     filename: '[name].[contenthash].js',
     assetModuleFilename: 'assets/[name][ext]',
   },

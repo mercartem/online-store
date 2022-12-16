@@ -45,6 +45,17 @@ img {
   pointer-events: none;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'header'
+    'main'
+    'footer';
+  grid-template-columns: 1fr;
+  grid-template-rows: 8rem 1fr 20rem;
+  height: 100%;
+}
+
 .container {
   width: 100%;
   max-width: 1200px;
