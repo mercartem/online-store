@@ -17,7 +17,12 @@
   margin-bottom: 3rem;
   padding: 2rem 1rem;
   img {
-    max-width: 24rem;
-    max-height: 24rem;
+    width: 24rem;
+    height: 24rem;
+    object-fit: contain;
   }
+}
+
+.product__name {
+  height: 4.8rem;
 }
