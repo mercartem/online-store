@@ -2,9 +2,6 @@
 @import 'variables';
 @import 'libs/normalize';
 
-@import '../views/pages/Main/HomeScreen.scss';
-// @import '../views/pages/Product/ProductScreen.scss';
-
 *,
 *::before,
 *::after {
@@ -218,3 +215,8 @@ img {
     border: 1px solid var(--gray-color);
   }
 }
+
+@import '../views/components/Header/header.scss';
+@import '../views/components/Footer/footer.scss';
+@import '../views/pages/Main/HomeScreen.scss';
+@import '../views/pages/Product/ProductScreen.scss';
