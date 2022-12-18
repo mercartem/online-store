@@ -3,6 +3,7 @@
 @import 'libs/normalize';
 
 @import '../views/pages/Main/HomeScreen.scss';
+// @import '../views/pages/Product/ProductScreen.scss';
 
 *,
 *::before,
@@ -54,7 +55,7 @@ img {
     'main'
     'footer';
   grid-template-columns: 1fr;
-  grid-template-rows: 8rem 1fr 20rem;
+  grid-template-rows: 8rem 1fr 24rem;
   height: 100%;
 }
 
