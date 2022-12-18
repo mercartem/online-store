@@ -2,27 +2,27 @@
   background-color: var(--dark-color);
 
   &__container {
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
 
     @media screen and (max-width: 991px) {
-      padding-top: 0rem;
-      padding-bottom: 0.8rem;
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
     }
   }
 
   &__logo {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     @media screen and (max-width: 991px) {
       margin-bottom: 1rem;
     }
   }
 
   &__nav {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 
     @media screen and (max-width: 991px) {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
   }
 
@@ -33,7 +33,7 @@
 
     @media screen and (max-width: 991px) {
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.4rem;
     }
   }
 
