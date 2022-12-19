@@ -2,12 +2,6 @@
 @import 'variables';
 @import 'libs/normalize';
 
-@import '../views/pages/Main/homeScreen.scss';
-@import '../views/pages/NotFound/error404Screen.scss';
-
-@import '../views/components/Header/header.scss';
-@import '../views/components/Footer/footer.scss';
-
 *,
 *::before,
 *::after {
@@ -26,8 +20,6 @@ body {
   background-color: var(--bg-color);
   font-family: var(--font-family);
   font-weight: 400;
-  font-size: 1.5rem;
-  line-height: 2.2rem;
   color: var(--black-color);
   height: 100vh;
 }
@@ -58,7 +50,7 @@ img {
     'main'
     'footer';
   grid-template-columns: 1fr;
-  grid-template-rows: 8rem 1fr 20rem;
+  grid-template-rows: 8rem 1fr 24rem;
   height: 100%;
 }
 
@@ -73,10 +65,8 @@ img {
   }
 }
 
-.main__container {
-  display: flex;
-  justify-content: center;
-  height: 100%;
+.page__container {
+  padding: 5rem 0;
 }
 
 .font_XXL {
@@ -229,3 +219,8 @@ img {
     border: 1px solid var(--gray-color);
   }
 }
+
+@import '../views/components/Header/header.scss';
+@import '../views/components/Footer/footer.scss';
+@import '../views/pages/Main/HomeScreen.scss';
+@import '../views/pages/Product/ProductScreen.scss';

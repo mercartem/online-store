@@ -1,4 +1,5 @@
 import './scss/app.scss';
+
 import { Screen } from './constans/types/interfaces';
 import { parseRequestUrl } from './constans/utils';
 import HomeScreen from './views/pages/Main/HomeScreen';
