@@ -1,7 +1,7 @@
 import { Screen } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
 
-class ProductScreen {
+class ProductScreen implements Screen {
   render() {
     return `
     <div class="page__container container">
