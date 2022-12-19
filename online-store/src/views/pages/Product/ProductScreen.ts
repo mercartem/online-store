@@ -1,3 +1,4 @@
+import { Screen } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
 
 class ProductScreen {
