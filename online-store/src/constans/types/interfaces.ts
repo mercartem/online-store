@@ -10,10 +10,14 @@ export interface Product {
   thumbnail: string;
   images: string[];
 }
+
 export interface Screen {
+  afterRender(): void;
   render(): string;
 }
+
 export type Data = Array<Product>;
+
 export type Route = {
   resource: string;
   id: string;

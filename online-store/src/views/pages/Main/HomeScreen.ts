@@ -3,7 +3,9 @@ import products from '../../../constans/data';
 import { Screen } from '../../../constans/types/interfaces';
 
 class HomeScreen implements Screen {
-  render() {
+  public afterRender() {}
+
+  public render() {
     return `
     <div class="page__container main__container container">
       <ul class="products">
