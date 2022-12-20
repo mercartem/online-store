@@ -24,6 +24,7 @@ const router = () => {
   const screen = routes[parseUrl] ? routes[parseUrl] : error404Screen;
   const main = document.querySelector('.page') as HTMLElement;
   main.innerHTML = screen.render();
+  screen.afterRender();
 };
 
 window.addEventListener('load', router);
