@@ -118,7 +118,7 @@ const products: Data = [
     brand: 'FC Manchester United',
     category: 'souvenirs',
     thumbnail: '../assets/img/products-8-1.png',
-    images: ['../assets/img/products-8-1.png', '../assets/img/products--2.png'],
+    images: ['../assets/img/products-8-1.png', '../assets/img/products-8-2.png'],
   },
   {
     id: 9,
