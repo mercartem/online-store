@@ -1,8 +1,88 @@
-import { Screen } from '../../../constans/types/interfaces';
+import { Screen, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
+import { parseRequestUrl } from '../../../constans/utils';
+import Header from '../../components/Header/Header';
+import { Swiper, Thumbs } from 'swiper';
 
 class ProductScreen implements Screen {
-  render() {
+  private header: Header;
+
+  constructor() {
+    this.header = new Header();
+  }
+
+  public afterRender(): void {
+    (document.querySelector('.product-order__one-click') as HTMLDivElement).addEventListener('click', () => {
+      console.log('click');
+      document.location.hash = `/cart`;
+    });
+
+    const thumbSwiper: Swiper = new Swiper('.thumbs .swiper-container', {
+      direction: 'vertical',
+      slidesPerView: 4,
+      spaceBetween: 24,
+      slideToClickedSlide: true,
+      breakpoints: {
+        320: {
+          direction: 'horizontal',
+          spaceBetween: 12,
+        },
+        992: { direction: 'vertical', spaceBetween: 20 },
+      },
+    });
+
+    const thumbs = document.querySelectorAll('.thumbs .swiper-slide') as NodeListOf<HTMLDivElement>;
+    const mySwiper: Swiper = new Swiper('.product-page__slider-wrapper .swiper-container', {
+      thumbs: {
+        swiper: thumbSwiper,
+      },
+      on: {
+        slideChange: function (): void {
+          thumbs.forEach((el) => {
+            el.classList.remove('thumbs-active');
+          });
+          const activeIndex: number = mySwiper.activeIndex;
+          thumbs[activeIndex].classList.add('thumbs-active');
+        },
+      },
+      direction: 'vertical',
+      slidesPerView: 1,
+      spaceBetween: 32,
+      allowTouchMove: false,
+
+      breakpoints: {
+        320: {
+          direction: 'horizontal',
+          allowTouchMove: true,
+          spaceBetween: 5,
+        },
+        992: {
+          direction: 'vertical',
+          allowTouchMove: false,
+          spaceBetween: 20,
+        },
+      },
+    });
+
+    thumbs.forEach((element) => {
+      element.addEventListener('click', () => {
+        thumbs.forEach((el) => {
+          el.classList.remove('thumbs-active');
+        });
+
+        element.classList.add('thumbs-active');
+        let swiperGetData: string | null = element.getAttribute('data-slide');
+        mySwiper.slideTo(Number(swiperGetData), 500);
+      });
+    });
+  }
+
+  public render(): string {
+    const request: Route = parseRequestUrl();
+    const id: number = Number(request.id) - 1;
+
+    this.header.render();
+
     return `
     <div class="page__container container">
         <ul class="breadcrumbs">
@@ -10,64 +90,75 @@ class ProductScreen implements Screen {
             <a href="/#/" class="font_M breadcrumbs__link">Catalog</a>
           </li>
           <li class="breadcrumbs__item">
-            <a href="" class="font_M breadcrumbs__link breadcrumbs__link-disabled">${products[0].category}</a>
+            <a href="" class="font_M breadcrumbs__link breadcrumbs__link-disabled">${products[id].category}</a>
           </li>
           <li class="breadcrumbs__item">
-            <a href="" class="font_M breadcrumbs__link breadcrumbs__link-disabled">${products[0].brand}</a>
+            <a href="" class="font_M breadcrumbs__link breadcrumbs__link-disabled">${products[id].brand}</a>
           </li>
           <li class="breadcrumbs__item">
-            <a href="" class="font_M breadcrumbs__link breadcrumbs__link-disabled">${products[0].title}</a>
+            <a href="" class="font_M breadcrumbs__link breadcrumbs__link-disabled">${products[id].title}</a>
           </li>
         </ul>
         <div class="product-page">
           <div class="product-page__slider">
-            <div class="product-page__slider-thumbs">
-              <ul class="thumbs-menu">
-                <li class="thumbs-menu__item thumbs-menu__item-active">
-                  <div>
-                    <img
-                      src="${products[0].images[0]}"
-                      alt="${products[0].title}">
-                  </div>
-                </li>
-                <li class="thumbs-menu__item">
-                  <div>
-                    <img
-                      src="${products[0].images[1]}"
-                      alt="${products[0].title}">
-                  </div>
-                </li>
-                <li class="thumbs-menu__item">
-                  <div>
-                    <img
-                      src="${products[0].images[2]}"
-                      alt="${products[0].title}">
-                  </div>
-                </li>
-                <li class="thumbs-menu__item">
-                  <div>
-                    <img
-                      src="${products[0].images[3]}"
-                      alt="${products[0].title}">
-                  </div>
-                </li>
-              </ul>
+            <div class="product-page__thumbs-wrapper">
+            <div class="thumbs">
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  ${products[id].images
+                    .map((item, index) =>
+                      index === 0
+                        ? `
+                      <div class="swiper-slide thumbs-active" data-slide='${index}'>
+                          <div class="thumbs__item">
+                            <img
+                              src="${item}"
+                              alt="${products[id].title}">
+                          </div>
+                        </div>`
+                        : `
+                        <div class="swiper-slide" data-slide='${index}'>
+                          <div class="thumbs__item">
+                            <img
+                              src="${item}"
+                              alt="${products[id].title}">
+                          </div>
+                        </div>
+                        `
+                    )
+                    .join('\n')}
+                </div>
+              </div>
+              </div>
             </div>
-            <div class="product-page__slider-wrap">
-              <div class="product-page__img">
-                <img
-                  src="${products[0].thumbnail}"
-                  alt="${products[0].title}">
+            <div class="product-page__slider-wrapper">
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  ${products[id].images
+                    .map(
+                      (item, index) =>
+                        `
+                     <div class="swiper-slide" data-slide='${index}'>
+                      <div class="product-page__img">
+                        <img
+                          src="${item}"
+                          alt="${products[id].title}">
+                      </div>
+                    </div>
+                    `
+                    )
+                    .join('\n')}
+                </div>
               </div>
             </div>
           </div>
           <div class="product-page__card">
             <div class="font_M product-page__name">
-              ${products[0].title}
+              ${products[id].title}
             </div>
             <div class="product-page__order product-order">
               <div class="font_S product-order__price">
-                ${products[0].price} ₽
+                ${products[id].price} ₽
               </div>
               <div class="product-order__actions">
                 <button class="btn btn_primary btn_L product-order__add-cart">Add to cart</button>
@@ -79,25 +170,25 @@ class ProductScreen implements Screen {
               <li class="product-menu__item">
                 <div class="product-menu__title">
                   <span class="font_XS">Brand:</span>
-                  <span class="font_XS">${products[0].brand}</span>
+                  <span class="font_XS">${products[id].brand}</span>
                 </div>
               </li>
               <li class="product-menu__item">
                 <div class="product-menu__title">
                   <span class="font_XS">Category:</span>
-                  <span class="font_XS">${products[0].category}</span>
+                  <span class="font_XS">${products[id].category}</span>
                 </div>
               </li>
               <li class="product-menu__item">
                 <div class="product-menu__title">
                   <span class="font_XS">In stock:</span>
-                  <span class="font_XS">${products[0].stock}</span>
+                  <span class="font_XS">${products[id].stock}</span>
                 </div>
               </li>
               <li class="product-menu__item">
                 <div class="product-menu__title">
                   <span class="font_XS">Description:</span>
-                  <div class="font_XS">${products[0].description}</div>
+                  <div class="font_XS">${products[id].description}</div>
                 </div>
               </li>
             </ul>
