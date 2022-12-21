@@ -28,4 +28,6 @@ export type Route = {
   resource: string;
   id: string;
   verb: string;
+  name: string;
+  value: string;
 };

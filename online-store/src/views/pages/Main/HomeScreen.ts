@@ -1,17 +1,24 @@
 import products from '../../../constans/data';
+import { rerender } from '../../../constans/utils';
 import { CartProduct, Screen } from '../../../constans/types/interfaces';
 import { getCartItems, setCartItems } from '../../../constans/localStorage';
+import cartScreen from '../Cart/CartScreen';
 
-class HomeScreen implements Required<Screen> {
-  addToCart(item: CartProduct) {
+class HomeScreen implements Screen {
+  addToCart(item: CartProduct, forceUpdate = false) {
     let cartItems: CartProduct[] = getCartItems();
     const existItem = cartItems.find((x) => x.product === item.product);
     if (existItem) {
-      cartItems = cartItems.map((x) => (x.product === existItem.product ? item : x));
+      if (forceUpdate) {
+        cartItems = cartItems.map((x) => (x.product === existItem.product ? item : x));
+      }
     } else {
       cartItems = [...cartItems, item];
     }
     setCartItems(cartItems);
+    if (forceUpdate) {
+      rerender(cartScreen);
+    }
   }
   removeFromCart(id: number) {
     setCartItems(getCartItems().filter((x) => x.product !== id));
@@ -81,4 +88,5 @@ class HomeScreen implements Required<Screen> {
   }
 }
 
-export default HomeScreen;
+const homeScreen = new HomeScreen();
+export default homeScreen;

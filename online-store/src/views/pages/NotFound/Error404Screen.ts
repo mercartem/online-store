@@ -15,4 +15,5 @@ class Error404Screen implements Screen {
   }
 }
 
-export default Error404Screen;
+const error404Screen = new Error404Screen();
+export default error404Screen;
