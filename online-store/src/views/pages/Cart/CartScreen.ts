@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Screen, Route, CartProduct } from '../../../constans/types/interfaces';
 import { getCartItems } from '../../../constans/localStorage';
@@ -9,6 +10,9 @@ class CartScreen implements Screen {
   limit: number;
   url: Route;
   page: number;
+  promo: number;
+  codes: string[];
+  appliedPromo: string[];
   constructor() {
     this.url = parseRequestUrl();
     this.limit =
@@ -19,6 +23,9 @@ class CartScreen implements Screen {
       Number(this.url.queryParams.page) <= Math.ceil(getCartItems().length / this.limit)
         ? Number(this.url.queryParams.page)
         : 1;
+    this.promo = 0;
+    this.codes = [];
+    this.appliedPromo = [];
   }
   afterRender() {
     const btnPlus: NodeListOf<HTMLElement> = document.querySelectorAll('.plus');
@@ -26,6 +33,38 @@ class CartScreen implements Screen {
     const rightArrow = document.querySelector('.right-arrow') as HTMLElement;
     const leftArrow = document.querySelector('.left-arrow') as HTMLElement;
     const select = document.querySelector('.select') as HTMLElement;
+    const form = document.querySelector('.order__promo') as HTMLFormElement;
+    const input = document.querySelector('.order__input') as HTMLInputElement;
+    const add: NodeListOf<HTMLElement> = document.querySelectorAll('.add');
+
+    form.addEventListener('submit', () => {
+      const code = input.value;
+      if (code === 'RS' || code === 'EPM') {
+        if (!this.codes.includes(code)) {
+          this.codes.push(code);
+          rerender(cartScreen);
+        }
+      }
+    });
+
+    for (let i = 0; i < add.length; i++) {
+      add[i].addEventListener('click', () => {
+        if (this.appliedPromo.includes(this.codes[i])) {
+          const index = this.appliedPromo.indexOf(this.codes[i]);
+          console.log(index);
+          if (index !== -1) {
+            this.appliedPromo.splice(index, 1);
+          }
+          console.log(this.codes[i]);
+          this.promo += -10;
+        } else {
+          this.promo += 10;
+          this.appliedPromo.push(this.codes[i]);
+        }
+        console.log(this.appliedPromo);
+        rerender(cartScreen);
+      });
+    }
 
     rightArrow.addEventListener('click', () => {
       this.page < getCartItems().length / this.limit ? this.page++ : this.page;
@@ -60,7 +99,8 @@ class CartScreen implements Screen {
         const qtyCount = item.qty - 1;
         if (qtyCount < 1) {
           homeScreen.removeFromCart(item.product);
-          this.page = this.page <= Math.ceil(getCartItems().length / this.limit) ? this.page : this.page - 1;
+          this.page =
+            this.page <= Math.ceil(getCartItems().length / this.limit) || this.page === 1 ? this.page : this.page - 1;
           rerender(cartScreen);
         } else {
           homeScreen.addToCart({ ...item, qty: qtyCount }, true);
@@ -71,7 +111,15 @@ class CartScreen implements Screen {
   render() {
     const cartItems = getCartItems();
     return cartItems.length < 1
-      ? `<div>Cart is empty...</div>`
+      ? `
+      <div class="page__container main__container container">
+        <div class="error">
+          <div class="error__info">
+            <h1 class="error__title font_XXL">Cart is empty...</h1>
+            <button class="btn btn_L btn_primary" href="/#/">Go to catalog</button>
+          </div>
+        <div>
+      </div>`
       : `
     <div class="page__container container shopping__container">
       <div class= "cart">
@@ -138,11 +186,42 @@ class CartScreen implements Screen {
         </div>
         <div class="order__sum font_XS">
           <div>TOTAL SUM:</div>
-          <div>${cartItems.reduce((a, c) => a + c.price * c.qty, 0)} ₽</div>
+          <div>
+            <div><span ${this.promo ? `class="sum sum__active"` : `class="sum"`}>${cartItems.reduce(
+          (a, c) => a + c.price * c.qty,
+          0
+        )} ₽</span> ${this.promo ? `-` + this.promo + `%` : ''}</div>
+            <div class="font_red">${
+              this.promo
+                ? cartItems.reduce((a, c) => a + c.price * c.qty, 0) -
+                  (cartItems.reduce((a, c) => a + c.price * c.qty, 0) / 100) * this.promo +
+                  ` ₽`
+                : ''
+            }</div>
+            <div class="font_XXS">${
+              this.appliedPromo.length > 0 ? `Applied codes: ` + this.appliedPromo.join(', ') : ``
+            }</div>
+          </div>
         </div>
-        <div class="order__promo">
-          <input class="font_XS" placeholder="Enter Promo code">
-          <button class="btn btn_M btn_outline font_red">APPLY</button>
+        <form class="order__promo">
+          <input class="order__input font_XS" type="text" placeholder="Enter promo code">
+          <button type="submit" class="btn btn_M btn_outline font_red">CHECK</button>
+        </form>
+        <div class="order__codes font_XS">
+          <p>${
+            this.codes.length > 0
+              ? `<button class="add ${this.appliedPromo.includes(this.codes[0]) ? `remove` : ``}"></button>` +
+                this.codes[0] +
+                ` - 10%`
+              : `Promo for test: 'RS', 'EPM'`
+          }</p>
+          <p>${
+            this.codes.length > 1
+              ? `<button class="add ${this.appliedPromo.includes(this.codes[1]) ? `remove` : ``}"></button>` +
+                this.codes[1] +
+                ` - 10%`
+              : ''
+          }</p>
         </div>
         <button class="btn btn_M btn_primary">PLACE AN ORDER</button>
     </div>
