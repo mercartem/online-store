@@ -10,6 +10,7 @@ export interface Product {
   thumbnail: string;
   images: string[];
 }
+
 export interface CartProduct {
   product: number;
   title: string;
@@ -19,11 +20,14 @@ export interface CartProduct {
   stock: number;
   qty: number;
 }
+
 export interface Screen {
   afterRender?(): void;
   render(): string;
 }
+
 export type Data = Array<Product>;
+
 export type Route = {
   resource: string;
   id: string;

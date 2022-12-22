@@ -25,7 +25,7 @@ class HomeScreen implements Screen {
   removeFromCart(id: number) {
     setCartItems(getCartItems().filter((x) => x.product !== id));
   }
-  afterRender() {
+  public afterRender() {
     const btns = document.querySelectorAll('.btn_M');
     for (let i = 0; i < btns.length; i++) {
       const cartItems = getCartItems();
@@ -61,7 +61,8 @@ class HomeScreen implements Screen {
       });
     }
   }
-  render() {
+
+  public render() {
     return `
     <div class="page__container main__container container">
       <ul class="products">
