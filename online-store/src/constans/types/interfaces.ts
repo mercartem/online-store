@@ -11,8 +11,18 @@ export interface Product {
   images: string[];
 }
 
+export interface CartProduct {
+  product: number;
+  title: string;
+  image: string;
+  price: number;
+  category: string;
+  stock: number;
+  qty: number;
+}
+
 export interface Screen {
-  afterRender(): void;
+  afterRender?(): void;
   render(): string;
 }
 
@@ -22,4 +32,5 @@ export type Route = {
   resource: string;
   id: string;
   verb: string;
+  queryParams: { [name: string]: string };
 };

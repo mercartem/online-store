@@ -117,9 +117,14 @@ img {
   font-weight: 700;
   font-size: 1.7rem;
   line-height: 2.4rem;
+  @media screen and (max-width: 991px) {
+    font-size: 1.5rem;
+    line-height: 2.2rem;
+  }
 }
 
 .font_XS {
+  font-weight: 400;
   font-size: 1.5rem;
   line-height: 2.2rem;
 
@@ -203,6 +208,14 @@ img {
   }
 }
 
+.btn_primary_disabled {
+  background-color: var(--gray-color);
+
+  &:hover {
+    background-color: var(--gray-color);
+  }
+}
+
 .btn_outline {
   color: var(--red-color);
   border: 1px solid var(--red-color);
@@ -225,3 +238,4 @@ img {
 @import '../views/pages/Main/HomeScreen.scss';
 @import '../views/pages/Product/ProductScreen.scss';
 @import '../views/pages/NotFound/error404Screen.scss';
+@import '../views/pages/Cart/cartScreen.scss';
