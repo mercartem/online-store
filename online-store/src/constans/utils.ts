@@ -6,13 +6,19 @@ export const parseRequestUrl = (): Route => {
     document.location.hash.slice(1).split('?').length === 2 ? document.location.hash.slice(1).split('?')[1] : '';
   const url = address.toLowerCase() || '/';
   const r = url.split('/');
-  const q = queryString.split('=');
+  const queryParams: { [key: string]: string } = {};
+  if (queryString) {
+    const queries = queryString.split('&');
+    queries.forEach((query) => {
+      const [name, value] = query.split('=');
+      queryParams[name] = value;
+    });
+  }
   return {
     resource: r[1],
     id: r[2],
     verb: r[3],
-    name: q[0],
-    value: q[1],
+    queryParams,
   };
 };
 
