@@ -18,6 +18,8 @@ class HomeScreen implements Screen {
     setCartItems(cartItems);
     if (forceUpdate) {
       rerender(cartScreen);
+    } else {
+      cartScreen.limit = getCartItems().length;
     }
   }
   removeFromCart(id: number) {

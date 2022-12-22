@@ -28,6 +28,7 @@ class CartScreen implements Screen {
     this.appliedPromo = [];
   }
   afterRender() {
+    console.log(this.page, this.limit, getCartItems().length);
     const btnPlus: NodeListOf<HTMLElement> = document.querySelectorAll('.plus');
     const btnMinus: NodeListOf<HTMLElement> = document.querySelectorAll('.minus');
     const rightArrow = document.querySelector('.right-arrow') as HTMLElement;
@@ -51,17 +52,14 @@ class CartScreen implements Screen {
       add[i].addEventListener('click', () => {
         if (this.appliedPromo.includes(this.codes[i])) {
           const index = this.appliedPromo.indexOf(this.codes[i]);
-          console.log(index);
           if (index !== -1) {
             this.appliedPromo.splice(index, 1);
           }
-          console.log(this.codes[i]);
           this.promo += -10;
         } else {
           this.promo += 10;
           this.appliedPromo.push(this.codes[i]);
         }
-        console.log(this.appliedPromo);
         rerender(cartScreen);
       });
     }
