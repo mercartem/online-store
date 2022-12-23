@@ -20,6 +20,7 @@ class HomeScreen implements Screen {
       rerender(cartScreen);
     } else {
       cartScreen.limit = getCartItems().length;
+      cartScreen.page = 1;
     }
   }
   removeFromCart(id: number) {

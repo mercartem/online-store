@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Screen, Route, CartProduct } from '../../../constans/types/interfaces';
 import { getCartItems } from '../../../constans/localStorage';
 import homeScreen from '../Main/HomeScreen';
@@ -28,7 +26,6 @@ class CartScreen implements Screen {
     this.appliedPromo = [];
   }
   afterRender() {
-    console.log(this.page, this.limit, getCartItems().length);
     const btnPlus: NodeListOf<HTMLElement> = document.querySelectorAll('.plus');
     const btnMinus: NodeListOf<HTMLElement> = document.querySelectorAll('.minus');
     const rightArrow = document.querySelector('.right-arrow') as HTMLElement;
@@ -37,73 +34,80 @@ class CartScreen implements Screen {
     const form = document.querySelector('.order__promo') as HTMLFormElement;
     const input = document.querySelector('.order__input') as HTMLInputElement;
     const add: NodeListOf<HTMLElement> = document.querySelectorAll('.add');
+    const btn = document.querySelector('.catalog') as HTMLElement;
 
-    form.addEventListener('submit', () => {
-      const code = input.value;
-      if (code === 'RS' || code === 'EPM') {
-        if (!this.codes.includes(code)) {
-          this.codes.push(code);
-          rerender(cartScreen);
-        }
-      }
-    });
-
-    for (let i = 0; i < add.length; i++) {
-      add[i].addEventListener('click', () => {
-        if (this.appliedPromo.includes(this.codes[i])) {
-          const index = this.appliedPromo.indexOf(this.codes[i]);
-          if (index !== -1) {
-            this.appliedPromo.splice(index, 1);
+    if (btn) {
+      btn.addEventListener('click', () => {
+        document.location.hash = `/`;
+      });
+    } else {
+      form.addEventListener('submit', () => {
+        const code = input.value;
+        if (code === 'RS' || code === 'EPM') {
+          if (!this.codes.includes(code)) {
+            this.codes.push(code);
+            rerender(cartScreen);
           }
-          this.promo += -10;
-        } else {
-          this.promo += 10;
-          this.appliedPromo.push(this.codes[i]);
         }
-        rerender(cartScreen);
       });
-    }
 
-    rightArrow.addEventListener('click', () => {
-      this.page < getCartItems().length / this.limit ? this.page++ : this.page;
-      document.location.hash = `/cart?limit=${this.limit}&page=${this.page}`;
-    });
-    leftArrow.addEventListener('click', () => {
-      this.page > 1 ? this.page-- : this.page;
-      document.location.hash = `/cart?limit=${this.limit}&page=${this.page}`;
-    });
-
-    select.addEventListener('change', (e) => {
-      const target = e.target as HTMLInputElement;
-      this.limit = Number(target.value);
-      this.page = this.page <= Math.ceil(getCartItems().length / this.limit) ? this.page : 1;
-      document.location.hash = `/cart?limit=${Number(target.value)}`;
-    });
-
-    for (let i = 0; i < btnPlus.length; i++) {
-      btnPlus[i].addEventListener('click', (e) => {
-        const items = getCartItems();
-        const target = e.target as HTMLElement;
-        const id = Number(target.id);
-        const item = items.find((x) => x.product === id) as CartProduct;
-        const qtyCount = item.qty < item.stock ? item.qty + 1 : item.qty;
-        homeScreen.addToCart({ ...item, qty: qtyCount }, true);
-      });
-      btnMinus[i].addEventListener('click', (e) => {
-        const items = getCartItems();
-        const target = e.target as HTMLElement;
-        const id = Number(target.id);
-        const item = items.find((x) => x.product === id) as CartProduct;
-        const qtyCount = item.qty - 1;
-        if (qtyCount < 1) {
-          homeScreen.removeFromCart(item.product);
-          this.page =
-            this.page <= Math.ceil(getCartItems().length / this.limit) || this.page === 1 ? this.page : this.page - 1;
+      for (let i = 0; i < add.length; i++) {
+        add[i].addEventListener('click', () => {
+          if (this.appliedPromo.includes(this.codes[i])) {
+            const index = this.appliedPromo.indexOf(this.codes[i]);
+            if (index !== -1) {
+              this.appliedPromo.splice(index, 1);
+            }
+            this.promo += -10;
+          } else {
+            this.promo += 10;
+            this.appliedPromo.push(this.codes[i]);
+          }
           rerender(cartScreen);
-        } else {
-          homeScreen.addToCart({ ...item, qty: qtyCount }, true);
-        }
+        });
+      }
+
+      rightArrow.addEventListener('click', () => {
+        this.page < getCartItems().length / this.limit ? this.page++ : this.page;
+        document.location.hash = `/cart?limit=${this.limit}&page=${this.page}`;
       });
+      leftArrow.addEventListener('click', () => {
+        this.page > 1 ? this.page-- : this.page;
+        document.location.hash = `/cart?limit=${this.limit}&page=${this.page}`;
+      });
+
+      select.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        this.limit = Number(target.value);
+        this.page = this.page <= Math.ceil(getCartItems().length / this.limit) ? this.page : 1;
+        document.location.hash = `/cart?limit=${Number(target.value)}`;
+      });
+
+      for (let i = 0; i < btnPlus.length; i++) {
+        btnPlus[i].addEventListener('click', (e) => {
+          const items = getCartItems();
+          const target = e.target as HTMLElement;
+          const id = Number(target.id);
+          const item = items.find((x) => x.product === id) as CartProduct;
+          const qtyCount = item.qty < item.stock ? item.qty + 1 : item.qty;
+          homeScreen.addToCart({ ...item, qty: qtyCount }, true);
+        });
+        btnMinus[i].addEventListener('click', (e) => {
+          const items = getCartItems();
+          const target = e.target as HTMLElement;
+          const id = Number(target.id);
+          const item = items.find((x) => x.product === id) as CartProduct;
+          const qtyCount = item.qty - 1;
+          if (qtyCount < 1) {
+            homeScreen.removeFromCart(item.product);
+            this.page =
+              this.page <= Math.ceil(getCartItems().length / this.limit) || this.page === 1 ? this.page : this.page - 1;
+            rerender(cartScreen);
+          } else {
+            homeScreen.addToCart({ ...item, qty: qtyCount }, true);
+          }
+        });
+      }
     }
   }
   render() {
@@ -114,7 +118,7 @@ class CartScreen implements Screen {
         <div class="error">
           <div class="error__info">
             <h1 class="error__title font_XXL">Cart is empty...</h1>
-            <button class="btn btn_L btn_primary" href="/#/">Go to catalog</button>
+            <button class="btn btn_L btn_primary catalog">Go to catalog</button>
           </div>
         <div>
       </div>`
