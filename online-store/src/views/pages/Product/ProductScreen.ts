@@ -1,18 +1,13 @@
 import { Screen, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
-import { parseRequestUrl } from '../../../constans/utils';
+import { parseRequestUrl, rerender } from '../../../constans/utils';
 // import Header from '../../components/Header/Header';
 import { Swiper, Thumbs } from 'swiper';
 import { getCartItems } from '../../../constans/localStorage';
 import homeScreen from '../Main/HomeScreen';
+import header from '../../components/Header/header';
 
 class ProductScreen implements Screen {
-  // private header: Header;
-
-  // constructor() {
-  //   this.header = new Header();
-  // }
-
   public afterRender(): void {
     (document.querySelector('.product-order__one-click') as HTMLDivElement).addEventListener('click', () => {
       console.log('click');
@@ -32,9 +27,10 @@ class ProductScreen implements Screen {
       btn.classList.remove('btn_primary_disabled');
     }
     btn.addEventListener('click', () => {
-      const product = products[id];
+      const product = products[id - 1];
       const cartItems = getCartItems();
       const existItem = cartItems.find((x) => x.product === id);
+      console.log(product, cartItems, existItem, id);
       if (existItem) {
         btn.textContent = 'ADD TO CART';
         btn.classList.remove('btn_primary_disabled');
@@ -117,8 +113,6 @@ class ProductScreen implements Screen {
   public render(): string {
     const request: Route = parseRequestUrl();
     const id: number = Number(request.id) - 1;
-
-    // this.header.render();
 
     return `
     <div class="page__container container">
