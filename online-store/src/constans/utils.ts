@@ -1,3 +1,4 @@
+import { Header } from '../views/components/Header/header';
 import { Route, Screen } from './types/interfaces';
 
 export const parseRequestUrl = (): Route => {
@@ -24,7 +25,12 @@ export const parseRequestUrl = (): Route => {
 
 export const rerender = (component: Screen): void => {
   const main = document.querySelector('.page') as HTMLElement;
-  main.innerHTML = component.render();
+  const header = document.querySelector('.header') as HTMLElement;
+  if (component instanceof Header) {
+    header.innerHTML = component.render();
+  } else {
+    main.innerHTML = component.render();
+  }
   if (component.afterRender) {
     component.afterRender();
   }

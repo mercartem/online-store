@@ -3,6 +3,7 @@ import { rerender } from '../../../constans/utils';
 import { CartProduct, Screen } from '../../../constans/types/interfaces';
 import { getCartItems, setCartItems } from '../../../constans/localStorage';
 import cartScreen from '../Cart/CartScreen';
+import header from '../../components/Header/header';
 
 class HomeScreen implements Screen {
   addToCart(item: CartProduct, forceUpdate = false) {
@@ -22,9 +23,11 @@ class HomeScreen implements Screen {
       cartScreen.limit = getCartItems().length;
       cartScreen.page = 1;
     }
+    rerender(header);
   }
   removeFromCart(id: number) {
     setCartItems(getCartItems().filter((x) => x.product !== id));
+    rerender(header);
   }
   public afterRender() {
     const btns = document.querySelectorAll('.btn_M');
@@ -64,6 +67,7 @@ class HomeScreen implements Screen {
   }
 
   public render() {
+    rerender(header);
     return `
     <div class="page__container main__container container">
       <ul class="products">

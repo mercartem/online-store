@@ -3,6 +3,7 @@ import { getCartItems } from '../../../constans/localStorage';
 import homeScreen from '../Main/HomeScreen';
 import { rerender } from '../../../constans/utils';
 import { parseRequestUrl } from '../../../constans/utils';
+import header from '../../components/Header/header';
 
 class CartScreen implements Screen {
   limit: number;
@@ -111,6 +112,7 @@ class CartScreen implements Screen {
     }
   }
   render() {
+    rerender(header);
     const cartItems = getCartItems();
     return cartItems.length < 1
       ? `
@@ -207,7 +209,7 @@ class CartScreen implements Screen {
         </div>
         <form class="order__promo">
           <input class="order__input font_XS" type="text" placeholder="Enter promo code">
-          <button type="submit" class="btn btn_M btn_outline font_red">CHECK</button>
+          <button type="submit" class="btn btn_M btn_outline font_red" required>CHECK</button>
         </form>
         <div class="order__codes font_XS">
           <p>${
