@@ -1,14 +1,14 @@
 import { Screen, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
 import { parseRequestUrl } from '../../../constans/utils';
-import Header from '../../components/Header/Header';
-import { Swiper, Thumbs } from 'swiper';
+// import Header from '../../components/Header/Header';
+import { Swiper } from 'swiper';
 
 class ProductScreen implements Screen {
-  private header: Header;
+  // private header: Header;
 
   constructor() {
-    this.header = new Header();
+    // this.header = new Header();
   }
 
   public afterRender(): void {
@@ -81,7 +81,7 @@ class ProductScreen implements Screen {
     const request: Route = parseRequestUrl();
     const id: number = Number(request.id) - 1;
 
-    this.header.render();
+    // this.header.render();
 
     return `
     <div class="page__container container">
