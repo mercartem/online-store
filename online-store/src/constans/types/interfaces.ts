@@ -11,6 +11,10 @@ export interface Product {
   images: string[];
 }
 
+export interface PaymentSystem<T> {
+  [index: string]: T;
+}
+
 export interface Screen {
   afterRender(): void;
   render(): string;
