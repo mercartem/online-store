@@ -1,17 +1,12 @@
 import { Screen, PaymentSystem } from '../../../constans/types/interfaces';
 
-export default class Modal implements Screen {
+export class Modal implements Screen {
   afterRender() {
-    // Open modal
-    // (document.querySelector('.product-order__one-click') as HTMLButtonElement).addEventListener('click', () => {
-    //   const modal = document.querySelector('.modal') as HTMLDivElement;
-    //   modal.classList.add('modal-open');
-    // });
-
     // Close modal
     (document.querySelector('.modal__btn') as HTMLButtonElement).addEventListener('click', () => {
       const modal = document.querySelector('.modal') as HTMLDivElement;
       modal.classList.remove('modal-open');
+      document.body.style.overflow = '';
     });
 
     // Click card inputs
@@ -247,6 +242,7 @@ export default class Modal implements Screen {
         <div class="modal__content-success">
           <h2 class="font_M">The order has been successfully placed!</h2>
         </div>`;
+        localStorage.clear();
 
         setTimeout(() => {
           document.location.hash = `/`;
@@ -260,7 +256,7 @@ export default class Modal implements Screen {
 
   render() {
     return `
-    <div class="modal modal-open">
+    <div class="modal">
         <div class="modal__overlay"></div>
         <div class="modal__container">
           <div class="modal__wrapper">
@@ -359,3 +355,6 @@ export default class Modal implements Screen {
     `;
   }
 }
+
+const modal = new Modal();
+export default modal;

@@ -4,6 +4,7 @@ import homeScreen from '../Main/HomeScreen';
 import { rerender } from '../../../constans/utils';
 import { parseRequestUrl } from '../../../constans/utils';
 import header from '../../components/Header/header';
+import modal from '../../components/Modal/Modal';
 
 class CartScreen implements Screen {
   limit: number;
@@ -26,6 +27,12 @@ class CartScreen implements Screen {
     this.codes = [];
     this.appliedPromo = [];
   }
+  openModal() {
+    const modal = document.querySelector('.modal') as HTMLDivElement;
+    document.body.style.overflow = 'hidden';
+    modal.classList.add('modal-open');
+  }
+
   afterRender() {
     const btnPlus: NodeListOf<HTMLElement> = document.querySelectorAll('.plus');
     const btnMinus: NodeListOf<HTMLElement> = document.querySelectorAll('.minus');
@@ -42,6 +49,13 @@ class CartScreen implements Screen {
         document.location.hash = `/`;
       });
     } else {
+      modal.afterRender();
+
+      // Open modal
+      (document.querySelector('.product-order__one-click') as HTMLButtonElement).addEventListener('click', () => {
+        this.openModal();
+      });
+
       form.addEventListener('submit', () => {
         const code = input.value;
         if (code === 'RS' || code === 'EPM') {
@@ -227,8 +241,9 @@ class CartScreen implements Screen {
               : ''
           }</p>
         </div>
-        <button class="btn btn_M btn_primary">PLACE AN ORDER</button>
+        <button class="btn btn_M btn_primary product-order__one-click">PLACE AN ORDER</button>
     </div>
+    ${modal.render()}
     `;
   }
 }
