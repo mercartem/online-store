@@ -1,8 +1,7 @@
 import { Screen, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
 import { parseRequestUrl, rerender } from '../../../constans/utils';
-// import Header from '../../components/Header/Header';
-import { Swiper, Thumbs } from 'swiper';
+import { Swiper } from 'swiper';
 import { getCartItems } from '../../../constans/localStorage';
 import homeScreen from '../Main/HomeScreen';
 import header from '../../components/Header/header';

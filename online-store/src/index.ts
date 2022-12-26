@@ -4,8 +4,10 @@ import { Route, Screen } from './constans/types/interfaces';
 import { parseRequestUrl } from './constans/utils';
 import homeScreen from './views/pages/Main/HomeScreen';
 import ProductScreen from './views/pages/Product/ProductScreen';
+
 import error404Screen from './views/pages/NotFound/Error404Screen';
 import cartScreen from './views/pages/Cart/CartScreen';
+
 
 const productScreen: ProductScreen = new ProductScreen();
 

@@ -1,0 +1,355 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 100;
+
+  &-open {
+    display: block;
+  }
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    touch-action: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  &__container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  &__wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    max-width: 100vw;
+    padding: 1rem;
+    background-color: var(--white-color);
+    position: relative;
+    min-width: 100%;
+    min-height: 100%;
+    margin: 0 0;
+
+    @media screen and (min-width: 991px) {
+      overflow: hidden;
+      padding: 2rem;
+      margin: 8rem 0;
+      min-width: auto;
+      min-height: auto;
+    }
+
+    &-success {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-radius: 1rem;
+      max-width: 50rem;
+      padding: 2rem;
+      background-color: var(--white-color);
+      position: relative;
+      margin: 15rem auto;
+    }
+  }
+
+  &__body {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 0.2rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--gray-color);
+      border-radius: 1rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 1rem;
+      border: 3px solid var(--red-color);
+    }
+
+    @media screen and (min-width: 991px) {
+      width: 46rem;
+    }
+  }
+
+  &__sections {
+    display: grid;
+    gap: 4.8rem;
+    max-width: 52rem;
+    margin: 0 auto;
+  }
+
+  &__btn {
+    background-color: transparent;
+    width: 2.4rem;
+    height: 2.4rem;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+
+    &:hover {
+      svg {
+        fill: var(--black-color);
+      }
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      fill: var(--gray-color);
+      transition: fill 0.35s ease;
+    }
+
+    @media screen and (max-width: 991px) {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+}
+
+.form-modal {
+  &__btn {
+    width: 100%;
+  }
+}
+
+.section-form {
+  display: grid;
+  gap: 2.4rem;
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__content {
+    display: grid;
+    gap: 4rem;
+  }
+
+  &__input {
+    position: relative;
+    display: inline-flex;
+    height: 4.5rem;
+    padding: 0.5rem 2rem;
+    border-radius: 1rem;
+    background-color: transparent;
+    border: 0.2rem solid var(--gray-color);
+    transition: all 0.1s ease;
+
+    &:hover {
+      background-color: var(--gray-color-light);
+    }
+
+    &:focus-within {
+      border: 0.2rem solid var(--black-color);
+    }
+  }
+
+  &__label {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    height: 100%;
+
+    input {
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      outline: none;
+      background-color: transparent;
+      color: var(--black-color);
+    }
+  }
+}
+
+.input-form {
+  position: relative;
+  height: 5rem;
+  margin-bottom: 3rem;
+
+  &-focus {
+    .card__label {
+      transform: translateY(-0.8rem) scale(0.75);
+    }
+
+    .input-form__card {
+      span {
+        opacity: 1;
+      }
+      &::after {
+        background: var(--red-color-light);
+      }
+    }
+  }
+
+  &__card {
+    height: 4rem;
+    width: 100%;
+    position: relative;
+    left: 0;
+    top: 1.5rem;
+
+    &::after {
+      background: var(--gray-color);
+      bottom: 0;
+      content: '';
+      height: 0.1rem;
+      left: 0;
+      position: absolute;
+      width: 100%;
+      transition: 0.35s linear;
+    }
+  }
+}
+
+.card {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    border: 0.2rem solid var(--gray-color);
+    border-radius: 1rem;
+    padding: 0 2.8rem;
+  }
+
+  &__number {
+    width: 24rem;
+  }
+
+  &__logo {
+    display: block;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    bottom: 0.5rem;
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+
+  &__visa {
+    background: url('../assets/svg/visa.svg');
+  }
+
+  &__mastercard {
+    background: url('../assets/svg/mastercard.svg');
+  }
+
+  &__mir {
+    background: url('../assets/svg/mir.svg');
+  }
+
+  &__month {
+    width: 10rem;
+
+    &-input {
+      input {
+        width: 100%;
+        height: 100%;
+        padding: 2px 0 0;
+      }
+
+      span {
+        opacity: 0;
+        width: 5px;
+        font-weight: 400;
+        padding: 0 8px;
+        margin: 0 1px 0 0;
+      }
+    }
+  }
+
+  &__cvv {
+    width: 10rem;
+    margin-bottom: 6rem;
+  }
+
+  &__label {
+    color: rgba(0, 0, 0, 0.4);
+    font-weight: 400;
+    position: absolute;
+    top: 1.3rem;
+    left: 0;
+    pointer-events: none;
+    transform: translate(0, 1.3rem);
+    transition: transform 0.1s ease;
+    z-index: 3;
+  }
+
+  &__input {
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    padding-right: 3rem;
+    color: var(--black-color);
+    background-color: transparent;
+  }
+}
+
+.validate-message {
+  display: none;
+  position: absolute;
+  bottom: -3rem;
+  left: 0;
+  color: var(--red-color);
+  font-weight: 600;
+  width: 100%;
+
+  &__card {
+    font-weight: 600;
+    display: none;
+    position: relative;
+    top: 2.2rem;
+    left: 0;
+    color: var(--red-color);
+  }
+}
+
+.error {
+  .validate-message {
+    display: block;
+
+    &__card {
+      display: block;
+    }
+  }
+  &.section-form__input {
+    border: 0.2rem solid var(--red-color);
+
+    .section-form__label input {
+      color: varvar(--red-color);
+    }
+  }
+
+  .card__input {
+    color: var(--red-color);
+  }
+}
