@@ -225,7 +225,7 @@ const products: Data = [
     discountPercentage: 20,
     stock: 8,
     brand: 'FC Real Madrid',
-    category: 'scarfs',
+    category: 'scarves',
     thumbnail: '../assets/img/products-15-1.png',
     images: [
       '../assets/img/products-15-1.png',

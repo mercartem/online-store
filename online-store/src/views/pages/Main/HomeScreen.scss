@@ -1,10 +1,15 @@
 .main__container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   height: 100%;
 }
 
+.filter {
+  flex: 1;
+}
+
 .products {
+  flex: 3;
   max-width: 78rem;
   display: flex;
   flex-wrap: wrap;

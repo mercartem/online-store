@@ -1,11 +1,16 @@
-import products from '../../../constans/data';
+// import products from '../../../constans/data';
 import { rerender } from '../../../constans/utils';
-import { CartProduct, Screen } from '../../../constans/types/interfaces';
+import { CartProduct, Screen, Product } from '../../../constans/types/interfaces';
 import { getCartItems, setCartItems } from '../../../constans/localStorage';
 import cartScreen from '../Cart/CartScreen';
 import header from '../../components/Header/header';
+import filter from '../../components/FiltersBlock/Filters';
 
 class HomeScreen implements Screen {
+  products: Product[];
+  constructor() {
+    this.products = filter.getFilterProducts();
+  }
   addToCart(item: CartProduct, forceUpdate = false) {
     let cartItems: CartProduct[] = getCartItems();
     const existItem = cartItems.find((x) => x.product === item.product);
@@ -30,10 +35,13 @@ class HomeScreen implements Screen {
     rerender(header);
   }
   public afterRender() {
-    const btns = document.querySelectorAll('.btn_M');
+    filter.afterRender();
+    this.products = filter.getFilterProducts();
+
+    const btns = document.querySelectorAll('.btn_primary');
     for (let i = 0; i < btns.length; i++) {
       const cartItems = getCartItems();
-      const existItem = cartItems.find((x) => x.product === i + 1);
+      const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
       if (existItem) {
         btns[i].textContent = 'DROP FROM CART';
         btns[i].classList.add('btn_primary_disabled');
@@ -41,10 +49,12 @@ class HomeScreen implements Screen {
         btns[i].textContent = 'ADD TO CART';
         btns[i].classList.remove('btn_primary_disabled');
       }
-      btns[i].addEventListener('click', () => {
-        const product = products[i];
+      btns[i].addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const id = Number(target.id);
+        const product = this.products[i];
         const cartItems = getCartItems();
-        const existItem = cartItems.find((x) => x.product === i + 1);
+        const existItem = cartItems.find((x) => x.product === id);
         if (existItem) {
           btns[i].textContent = 'ADD TO CART';
           btns[i].classList.remove('btn_primary_disabled');
@@ -67,9 +77,15 @@ class HomeScreen implements Screen {
   }
 
   public render() {
+    const products = filter.getFilterProducts();
     rerender(header);
     return `
     <div class="page__container main__container container">
+      <div class="filter">${filter.render()}</div>
+      ${
+        products.length < 1
+          ? `<div class="products">Продукт не найден!</div>`
+          : `
       <ul class="products">
         ${products
           .map(
@@ -91,6 +107,8 @@ class HomeScreen implements Screen {
           )
           .join('\n')}
       </ul>
+      `
+      }
     </div>
     `;
   }
