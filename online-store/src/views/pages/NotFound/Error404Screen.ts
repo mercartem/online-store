@@ -1,4 +1,6 @@
 import { Screen } from '../../../constans/types/interfaces';
+import { rerender } from '../../../constans/utils';
+import header from '../../components/Header/header';
 
 class Error404Screen implements Screen {
   public afterRender(): void {
@@ -22,4 +24,5 @@ class Error404Screen implements Screen {
   }
 }
 
-export default Error404Screen;
+const error404Screen = new Error404Screen();
+export default error404Screen;

@@ -1,20 +1,52 @@
 import { Screen, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
-import { parseRequestUrl } from '../../../constans/utils';
-// import Header from '../../components/Header/Header';
+import { parseRequestUrl, rerender } from '../../../constans/utils';
 import { Swiper } from 'swiper';
+import { getCartItems } from '../../../constans/localStorage';
+import homeScreen from '../Main/HomeScreen';
+import header from '../../components/Header/header';
 
 class ProductScreen implements Screen {
-  // private header: Header;
-
-  constructor() {
-    // this.header = new Header();
-  }
-
   public afterRender(): void {
     (document.querySelector('.product-order__one-click') as HTMLDivElement).addEventListener('click', () => {
       console.log('click');
       document.location.hash = `/cart`;
+    });
+
+    const request: Route = parseRequestUrl();
+    const id: number = Number(request.id);
+    const btn = document.querySelector('.btn_L') as HTMLElement;
+    const cartItems = getCartItems();
+    const existItem = cartItems.find((x) => x.product === id);
+    if (existItem) {
+      btn.textContent = 'DROP FROM CART';
+      btn.classList.add('btn_primary_disabled');
+    } else {
+      btn.textContent = 'ADD TO CART';
+      btn.classList.remove('btn_primary_disabled');
+    }
+    btn.addEventListener('click', () => {
+      const product = products[id - 1];
+      const cartItems = getCartItems();
+      const existItem = cartItems.find((x) => x.product === id);
+      console.log(product, cartItems, existItem, id);
+      if (existItem) {
+        btn.textContent = 'ADD TO CART';
+        btn.classList.remove('btn_primary_disabled');
+        homeScreen.removeFromCart(existItem.product);
+      } else {
+        homeScreen.addToCart({
+          product: product.id,
+          title: product.title,
+          image: product.thumbnail,
+          price: product.price,
+          category: product.category,
+          stock: product.stock,
+          qty: 1,
+        });
+        btn.textContent = 'DROP FROM CART';
+        btn.classList.add('btn_primary_disabled');
+      }
     });
 
     const thumbSwiper: Swiper = new Swiper('.thumbs .swiper-container', {
@@ -80,8 +112,6 @@ class ProductScreen implements Screen {
   public render(): string {
     const request: Route = parseRequestUrl();
     const id: number = Number(request.id) - 1;
-
-    // this.header.render();
 
     return `
     <div class="page__container container">
