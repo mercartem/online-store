@@ -4,15 +4,11 @@ import { parseRequestUrl, rerender } from '../../../constans/utils';
 import { Swiper } from 'swiper';
 import { getCartItems } from '../../../constans/localStorage';
 import homeScreen from '../Main/HomeScreen';
+import cartScreen from '../Cart/CartScreen';
 import header from '../../components/Header/header';
 
 class ProductScreen implements Screen {
   public afterRender(): void {
-    (document.querySelector('.product-order__one-click') as HTMLDivElement).addEventListener('click', () => {
-      console.log('click');
-      document.location.hash = `/cart`;
-    });
-
     const request: Route = parseRequestUrl();
     const id: number = Number(request.id);
     const btn = document.querySelector('.btn_L') as HTMLElement;
@@ -25,11 +21,32 @@ class ProductScreen implements Screen {
       btn.textContent = 'ADD TO CART';
       btn.classList.remove('btn_primary_disabled');
     }
+
+    (document.querySelector('.product-order__one-click') as HTMLDivElement).addEventListener('click', () => {
+      document.location.hash = `/cart`;
+      const product = products[id - 1];
+      const cartItems = getCartItems();
+      const existItem = cartItems.find((x) => x.product === id);
+      if (!existItem) {
+        homeScreen.addToCart({
+          product: product.id,
+          title: product.title,
+          image: product.thumbnail,
+          price: product.price,
+          category: product.category,
+          stock: product.stock,
+          qty: 1,
+        });
+        btn.textContent = 'DROP FROM CART';
+        btn.classList.add('btn_primary_disabled');
+      }
+      setTimeout(cartScreen.openModal, 100);
+    });
+
     btn.addEventListener('click', () => {
       const product = products[id - 1];
       const cartItems = getCartItems();
       const existItem = cartItems.find((x) => x.product === id);
-      console.log(product, cartItems, existItem, id);
       if (existItem) {
         btn.textContent = 'ADD TO CART';
         btn.classList.remove('btn_primary_disabled');
@@ -112,7 +129,7 @@ class ProductScreen implements Screen {
   public render(): string {
     const request: Route = parseRequestUrl();
     const id: number = Number(request.id) - 1;
-
+    rerender(header);
     return `
     <div class="page__container container">
         <ul class="breadcrumbs">
