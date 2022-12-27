@@ -43,6 +43,10 @@ img {
   pointer-events: none;
 }
 
+.page {
+  margin-top: 8rem;
+}
+
 .grid-container {
   display: grid;
   grid-template-areas:
@@ -50,7 +54,8 @@ img {
     'main'
     'footer';
   grid-template-columns: 1fr;
-  grid-template-rows: 8rem 1fr 24rem;
+  // Футер прижимается к хэдеру
+  // grid-template-rows: 8rem 1fr 24rem;
   height: 100%;
 }
 
