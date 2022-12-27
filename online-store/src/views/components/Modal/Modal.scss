@@ -42,7 +42,6 @@
     flex-direction: column;
     border-radius: 1rem;
     max-width: 100vw;
-    padding: 1rem;
     background-color: var(--white-color);
     position: relative;
     min-width: 100%;
@@ -51,7 +50,6 @@
 
     @media screen and (min-width: 991px) {
       overflow: hidden;
-      padding: 2rem;
       margin: 8rem 0;
       min-width: auto;
       min-height: auto;
@@ -74,23 +72,19 @@
   &__body {
     overflow-y: auto;
     overflow-x: hidden;
+    padding: 2rem 0.5rem;
 
     &::-webkit-scrollbar {
       width: 0.2rem;
     }
 
     &::-webkit-scrollbar-track {
-      background: var(--gray-color);
-      border-radius: 1rem;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 1rem;
-      border: 3px solid var(--red-color);
+      background: transparent;
     }
 
     @media screen and (min-width: 991px) {
       width: 46rem;
+      padding: 2rem;
     }
   }
 
@@ -106,8 +100,8 @@
     width: 2.4rem;
     height: 2.4rem;
     position: absolute;
-    top: 2rem;
-    right: 2rem;
+    top: 0;
+    right: 0;
 
     &:hover {
       svg {
@@ -137,6 +131,7 @@
 }
 
 .section-form {
+  position: relative;
   display: grid;
   gap: 2.4rem;
 
@@ -237,7 +232,7 @@
     flex-direction: column;
     border: 0.2rem solid var(--gray-color);
     border-radius: 1rem;
-    padding: 0 2.8rem;
+    padding: 0 1.5rem;
   }
 
   &__number {
