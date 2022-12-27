@@ -108,11 +108,18 @@
 label {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 label input {
   display: none;
 }
+
+label div {
+  display: flex;
+  align-items: center;
+}
+
 label span {
   height: 2.5rem;
   width: 2.5rem;

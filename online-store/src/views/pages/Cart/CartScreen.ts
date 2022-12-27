@@ -51,7 +51,6 @@ class CartScreen implements Screen {
     } else {
       modal.afterRender();
 
-      // Open modal
       (document.querySelector('.product-order__one-click') as HTMLButtonElement).addEventListener('click', () => {
         this.openModal();
       });
