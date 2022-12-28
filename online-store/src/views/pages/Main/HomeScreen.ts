@@ -85,7 +85,7 @@ class HomeScreen implements Screen {
     <div class="page__container main__container container">
       <div class="catalog">
         <div class="sort">${sort.render()}</div>
-        <ul class="products">
+        <ul class="products ${sort.viewProducts === 'list' ? 'products-list' : ''}">
           ${products
             .map(
               (product) => `
