@@ -84,7 +84,7 @@ class HomeScreen implements Screen {
       <div class="filter">${filter.render()}</div>
       ${
         products.length < 1
-          ? `<div class="products">Продукт не найден!</div>`
+          ? `<div class="products font_XXL">Products not found!</div>`
           : `
       <ul class="products">
         ${products

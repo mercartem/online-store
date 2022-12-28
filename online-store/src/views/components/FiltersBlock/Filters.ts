@@ -14,11 +14,13 @@ class Filter implements Screen {
   minPrice: number;
   maxQty: number;
   minQty: number;
+  search: string;
   constructor() {
     this.url = parseRequestUrl();
     this.products = products;
     this.filterBrand = this.url.queryParams.brand ? this.url.queryParams.brand.split('-').join(' ').split('+') : [];
     this.filterCategory = this.url.queryParams.category ? this.url.queryParams.category.split('+') : [];
+    this.search = this.url.queryParams.search ? this.url.queryParams.search : '';
     this.maxPrice = this.url.queryParams.price
       ? Number(this.url.queryParams.price.split('+')[1])
       : Math.max(...products.map((x) => x.price));
@@ -33,11 +35,18 @@ class Filter implements Screen {
       : Math.min(...products.map((x) => x.stock));
   }
   getFilterProducts() {
+    return this.applyFilters();
+  }
+
+  applyFilters() {
+    this.products = this.filterProductsCheckbox();
     this.products = this.filterProductsSlider();
+    this.products = this.searchProducts(this.search);
     return this.products;
   }
+
   filterProductsCheckbox() {
-    return products.filter((x) => {
+    const result = products.filter((x) => {
       if (this.filterBrand.length < 1 && this.filterCategory.length < 1) {
         return true;
       }
@@ -55,17 +64,62 @@ class Filter implements Screen {
         }
       }
     });
+    return result;
   }
+
   filterProductsSlider() {
-    return this.filterProductsCheckbox().filter(
+    const products = this.products;
+    return products.filter(
       (x) => x.price >= this.minPrice && x.price <= this.maxPrice && x.stock >= this.minQty && x.stock <= this.maxQty
     );
   }
+
+  setSliderValue() {
+    this.minPrice = Math.min(...this.products.map((x) => x.price));
+    this.maxPrice = Math.max(...this.products.map((x) => x.price));
+    this.minQty = Math.min(...this.products.map((x) => x.stock));
+    this.maxQty = Math.max(...this.products.map((x) => x.stock));
+  }
+
+  searchProducts(search: string): Product[] {
+    const products = this.products;
+    const nonInformativeFields = ['id', 'thumbnail', 'images', 'discountPercentage'];
+    const result = products.filter((product) => {
+      return Object.entries(product)
+        .filter(([key, val]) => !nonInformativeFields.includes(key))
+        .some(([key, val]) => val.toString().toLowerCase().includes(search.toLowerCase()));
+    });
+    return result;
+  }
+
+  resetFilters() {
+    this.filterCategory = [];
+    this.filterBrand = [];
+    this.search = '';
+    this.minPrice = Math.min(...products.map((x) => x.price));
+    this.maxPrice = Math.max(...products.map((x) => x.price));
+    this.minQty = Math.min(...products.map((x) => x.stock));
+    this.maxQty = Math.max(...products.map((x) => x.stock));
+    this.products = products;
+  }
+
+  copyUrl() {
+    const url = window.location.href;
+    const tempInput = document.createElement('input');
+    tempInput.value = url;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+  }
+
   afterRender() {
     const price = document.querySelector('.input-price') as noUiSlider.Instance;
     const qty = document.querySelector('.input-qty') as noUiSlider.Instance;
     const checkbox: NodeListOf<HTMLInputElement> = document.querySelectorAll('[type="checkbox"]');
     const search = document.querySelector('[type="search"]') as HTMLInputElement;
+    const btnReset = document.querySelector('.filter__btn-reset') as HTMLElement;
+    const btnCopy = document.querySelector('.filter__btn-copy') as HTMLElement;
     const priceValues: HTMLElement[] = [
       document.querySelector('.input-price__value-1') as HTMLElement,
       document.querySelector('.input-price__value-2') as HTMLElement,
@@ -93,10 +147,7 @@ class Filter implements Screen {
           this.filterBrand.length < 1 || this.filterCategory.length < 1
             ? this.filterProductsCheckbox()
             : this.filterProductsSlider();
-        this.minPrice = Math.min(...this.products.map((x) => x.price));
-        this.maxPrice = Math.max(...this.products.map((x) => x.price));
-        this.minQty = Math.min(...this.products.map((x) => x.stock));
-        this.maxQty = Math.max(...this.products.map((x) => x.stock));
+        this.setSliderValue();
         document.location.hash = `/?category=${this.filterCategory.join('+')}&brand=${this.filterBrand
           .join('+')
           .split(' ')
@@ -139,7 +190,7 @@ class Filter implements Screen {
     });
     price.noUiSlider.on('end', function (values: string[]): void {
       [filter.minPrice, filter.maxPrice] = [Number(values[0]), Number(values[1])];
-      filter.products = filter.filterProductsSlider();
+      filter.products = filter.applyFilters();
       document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
         .join('+')
         .split(' ')
@@ -151,16 +202,38 @@ class Filter implements Screen {
     });
     qty.noUiSlider.on('end', function (values: string[]): void {
       [filter.minQty, filter.maxQty] = [Number(values[0]), Number(values[1])];
-      filter.products = filter.filterProductsSlider();
+      filter.products = filter.applyFilters();
       document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
         .join('+')
         .split(' ')
         .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}`;
     });
 
-    // search.addEventListener('input', () => {
-    //   this.products.forEach
-    // });
+    search.value = this.search;
+    search.focus();
+    search.addEventListener('input', () => {
+      this.products = search.value.length < this.search.length ? this.filterProductsCheckbox() : this.applyFilters();
+      this.products = this.searchProducts(search.value);
+      this.setSliderValue();
+      this.search = search.value;
+      document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+        .join('+')
+        .split(' ')
+        .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+        this.search
+      }`;
+    });
+
+    btnReset.addEventListener('click', () => {
+      this.resetFilters();
+      document.location.hash = '/';
+    });
+
+    btnCopy.addEventListener('click', () => {
+      this.copyUrl();
+      btnCopy.innerHTML = 'COPIED!';
+      btnCopy.classList.add('btn_disabled');
+    });
   }
   render() {
     return `
@@ -170,7 +243,6 @@ class Filter implements Screen {
         <div class="search font_S">
           <div class="search__icon"></div>
           <input type="search" placeholder="Search">
-          <div class="search__icon-close"></div>
         </div>
       </form>
       <h2 class="font_M filter__title">Price ₽</h2>
@@ -272,8 +344,8 @@ class Filter implements Screen {
         </label>
       </div>
       <div class="filter__btns">
-        <button class="btn btn_M btn_outline filter__btn">RESET FILTERS</button>
-        <button class="btn btn_M btn_outline filter__btn">COPY LINK</button>
+        <button class="btn btn_M btn_outline filter__btn-reset">RESET FILTERS</button>
+        <button class="btn btn_M btn_outline filter__btn-copy">COPY LINK</button>
       </div>
     </div>
     `;
