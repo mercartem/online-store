@@ -3,7 +3,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
   padding: 5rem 2rem;
 }
 
@@ -18,9 +17,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 2px solid var(--line-color);
-  border-left: 0;
-  border-right: 0;
+  border-bottom: 0.2rem solid var(--line-color);
+  border-top: 0.2rem solid var(--line-color);
 }
 
 .cart__info {
@@ -51,15 +49,21 @@
   cursor: pointer;
 }
 
+.cart__items {
+  position: relative;
+}
+
+.select {
+  position: absolute;
+  top: 0;
+}
+
 .cart__item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 0;
-  border: 3px solid var(--line-color);
-  border-left: 0;
-  border-right: 0;
-  border-top: 0;
+  border-bottom: 0.2rem solid var(--line-color);
 }
 
 .cart__product {
@@ -74,6 +78,19 @@
   }
 }
 
+.cart__total {
+  text-align: center;
+}
+.cart__info-product,
+.cart__info-price,
+.cart__info-qty,
+.cart__info-total,
+.cart__items,
+.cart__qty,
+.cart__pgn,
+.about__title {
+  font-weight: 600;
+}
 .cart__info-product {
   flex: 2;
 }
@@ -88,8 +105,7 @@
   text-align: center;
 }
 
-.cart__info-total,
-.cart__total {
+.cart__info-total {
   text-align: right;
 }
 
@@ -110,13 +126,13 @@
 }
 
 .order {
-  height: 52rem;
   align-self: flex-start;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 3rem;
+  border-radius: 1rem;
   background-color: var(--gray-color-light);
 }
 
@@ -127,10 +143,13 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  border: 3px solid var(--line-color);
-  border-left: 0;
-  border-right: 0;
-  border-top: 0;
+  border-bottom: 0.1rem solid var(--gray-color);
+  padding-bottom: 2.5rem;
+}
+
+.order__items,
+.order__sum,
+.order__promo {
   padding: 2.5rem 0;
 }
 
@@ -194,18 +213,25 @@
 
 @media (max-width: 1000px) {
   .shopping__container {
+    flex-direction: column;
     justify-content: center;
   }
   .cart {
-    width: auto;
+    width: 100%;
   }
   .cart__product {
+    width: 5rem;
     flex-wrap: wrap;
   }
   .cart__about {
+    width: 7.2rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .order {
+    margin: 0 auto;
   }
 }
 
@@ -214,6 +240,17 @@
     img {
       width: 5rem;
       height: 7rem;
+      margin: 0;
+      margin-left: 1.5rem;
     }
+  }
+
+  .cart__price {
+    text-align: left;
+  }
+
+  .cart__qty,
+  .cart__item {
+    gap: 0.3rem;
   }
 }

@@ -4,11 +4,13 @@ import { getCartItems, setCartItems } from '../../../constans/localStorage';
 import cartScreen from '../Cart/CartScreen';
 import header from '../../components/Header/header';
 import filter from '../../components/FiltersBlock/Filters';
+import sort from '../../components/SortBlock/Sort';
 
 class HomeScreen implements Screen {
   products: Product[];
   constructor() {
     this.products = filter.getFilterProducts();
+//     this.products = sort.getSortProducts();
   }
 
   addToCart(item: CartProduct, forceUpdate = false) {
@@ -41,6 +43,14 @@ class HomeScreen implements Screen {
     this.products = filter.getFilterProducts();
 
     const btns = document.querySelectorAll('.btn_primary');
+//
+//   public afterRender(): void {
+//     sort.afterRender();
+//     this.products = sort.getSortProducts();
+//     console.log(this.products);
+
+//     const btns = document.querySelectorAll('.btn_M');
+//
     for (let i = 0; i < btns.length; i++) {
       const cartItems = getCartItems();
       const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
@@ -84,11 +94,12 @@ class HomeScreen implements Screen {
     return `
     <div class="page__container main__container container">
       <div class="filter">${filter.render()}</div>
+      <div class="sort">${sort.render()}</div>
       ${
         products.length < 1
           ? `<div class="products font_XXL">Products not found!</div>`
           : `
-      <ul class="products">
+      <ul class="products ${sort.viewProducts === 'list' ? 'products-list' : ''}">
         ${products
           .map(
             (product) => `
