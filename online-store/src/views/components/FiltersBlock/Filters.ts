@@ -278,7 +278,7 @@ class Filter implements Screen {
       <div class="filter__brand font_XS">
         <label>
           <div>
-            <input type="checkbox" id="cska" name="PFC CSKA">
+            <input class="checkbox" type="checkbox" id="cska" name="PFC CSKA">
             <span></span>
             PFC CSKA 
           </div>
@@ -286,7 +286,7 @@ class Filter implements Screen {
         </label>
         <label>
           <div>
-            <input type="checkbox" id="dynamo" name="FC Dynamo">
+            <input class="checkbox" type="checkbox" id="dynamo" name="FC Dynamo">
             <span></span>
             FC Dynamo
           </div>
@@ -294,7 +294,7 @@ class Filter implements Screen {
         </label>
         <label>
           <div>
-            <input type="checkbox" id="lokomotiv" name="FC Lokomotiv">
+            <input class="checkbox" type="checkbox" id="lokomotiv" name="FC Lokomotiv">
             <span></span>
             FC Lokomotiv
           </div>
@@ -302,7 +302,7 @@ class Filter implements Screen {
         </label>
         <label>
           <div>
-            <input type="checkbox" id="manchester" name="FC Manchester United">
+            <input class="checkbox" type="checkbox" id="manchester" name="FC Manchester United">
             <span></span>
             FC Manchester United
           </div>
@@ -310,7 +310,7 @@ class Filter implements Screen {
         </label>
         <label>
           <div>
-            <input type="checkbox" id="real" name="FC Real Madrid">
+            <input class="checkbox" type="checkbox" id="real" name="FC Real Madrid">
             <span></span>
             FC Real Madrid
           </div>
@@ -321,7 +321,7 @@ class Filter implements Screen {
       <div class="filter__category font_XS">
         <label>
           <div>
-            <input type="checkbox" id="balls" name="balls">
+            <input class="checkbox" type="checkbox" id="balls" name="balls">
             <span></span>
             Balls
           </div>
@@ -329,7 +329,7 @@ class Filter implements Screen {
         </label>
         <label>
           <div>
-            <input type="checkbox" id="uniforms" name="uniforms">
+            <input class="checkbox" type="checkbox" id="uniforms" name="uniforms">
             <span></span>
             Uniforms
           </div>
@@ -337,7 +337,7 @@ class Filter implements Screen {
         </label>
         <label>
           <div>
-            <input type="checkbox" id="scarves" name="scarves">
+            <input class="checkbox" type="checkbox" id="scarves" name="scarves">
             <span></span>
             Scarves
           </div>
@@ -345,7 +345,7 @@ class Filter implements Screen {
         </label>
         <label>
           <div>
-            <input type="checkbox" id="hats" name="hats">
+            <input class="checkbox" type="checkbox" id="hats" name="hats">
             <span></span>
             Hats
           </div>
@@ -353,7 +353,7 @@ class Filter implements Screen {
         </label>
         <label>
           <div>
-            <input type="checkbox" id="souvenirs" name="souvenirs">
+            <input class="checkbox" type="checkbox" id="souvenirs" name="souvenirs">
             <span></span>
             Souvenirs
           </div>
