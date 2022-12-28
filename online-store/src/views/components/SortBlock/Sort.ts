@@ -1,5 +1,5 @@
 import { Screen, Product, Route } from '../../../constans/types/interfaces';
-import products from '../../../constans/data';
+import filter from '../FiltersBlock/Filters';
 import { parseRequestUrl } from '../../../constans/utils';
 
 class Sort implements Screen {
@@ -10,33 +10,33 @@ class Sort implements Screen {
 
   constructor() {
     this.url = parseRequestUrl();
-    this.products = products;
+    this.products = filter.getFilterProducts();
     this.sortProducts = this.url.queryParams.sort ? this.url.queryParams.sort : '';
     this.viewProducts = this.url.queryParams.view ? this.url.queryParams.view : 'block';
   }
 
   getSortProducts() {
-    // if (this.url.queryParams.sort) {
-    //   console.log(this.url.queryParams.sort);
-    //   // this.sort(this.url.queryParams.sort);
-    // }
-    return this.products;
+    this.products = filter.getFilterProducts();
+    return this.sort(this.sortProducts);
   }
 
-  public sort(sortProducts: string) {
+  public sort(sortProducts: string): Product[] {
     switch (sortProducts) {
       case 'nameAZ':
         return this.products.sort((a, b) => a.title.localeCompare(b.title));
       case 'nameZA':
         return this.products.sort((a, b) => b.title.localeCompare(a.title));
-      case 'priceHigh':
-        return this.products.sort((a, b) => Number(b.price) - Number(a.price));
       case 'priceLow':
+        return this.products.sort((a, b) => Number(b.price) - Number(a.price));
+      case 'priceHigh':
         return this.products.sort((a, b) => Number(a.price) - Number(b.price));
+      default:
+        return this.products;
     }
   }
 
   public afterRender(): void {
+    this.products = filter.getFilterProducts();
     const dropdown = document.querySelector('.sort__dropdown') as HTMLDivElement;
     dropdown.addEventListener('click', () => {
       dropdown.classList.toggle('sort__dropdown-active');
@@ -55,13 +55,17 @@ class Sort implements Screen {
         (document.querySelector('.sort__input') as HTMLInputElement).value = element.innerHTML;
         this.sort(element.id);
         this.sortProducts = element.id;
-        document.location.hash = `/?sort=${this.sortProducts}&view=${this.viewProducts}`;
+        document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+          .join('+')
+          .split(' ')
+          .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+          filter.search
+        }&sort=${this.sortProducts}&view=${this.viewProducts}`;
       });
     });
 
     sortItems.forEach((element) => {
       if (this.sortProducts === element.id) {
-        // this.sort(element.id);
         (document.querySelector('.sort__input') as HTMLInputElement).value = element.innerHTML;
       }
     });
@@ -75,7 +79,12 @@ class Sort implements Screen {
           }
           element.classList.add('view__item-active');
           this.viewProducts = element.id;
-          document.location.hash = `/?sort=${this.sortProducts}&view=${this.viewProducts}`;
+          document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+            .join('+')
+            .split(' ')
+            .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+            filter.search
+          }&sort=${this.sortProducts}&view=${this.viewProducts}`;
         }
       });
     });
