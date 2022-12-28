@@ -75,7 +75,9 @@
     padding: 2rem 0.5rem;
 
     &::-webkit-scrollbar {
-      width: 0.2rem;
+      width: 0;
+      height: 0;
+      background-color: transparent;
     }
 
     &::-webkit-scrollbar-track {

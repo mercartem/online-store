@@ -6,8 +6,12 @@
 
 .main__container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   height: 100%;
+}
+
+.filter {
+  flex: 1;
 }
 
 .products {

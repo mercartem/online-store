@@ -55,7 +55,7 @@ img {
     'footer';
   grid-template-columns: 1fr;
   // Футер прижимается к хэдеру
-  // grid-template-rows: 8rem 1fr 24rem;
+  // grid-template-rows: 8rem 1fr 20rem;
   height: 100%;
 }
 
@@ -241,6 +241,7 @@ img {
 @import '../views/components/Header/header.scss';
 @import '../views/components/Footer/footer.scss';
 @import '../views/pages/Main/HomeScreen.scss';
+@import '../views/components/FiltersBlock/filters.scss';
 @import '../views/components/SortBlock/Sort.scss';
 @import '../views/pages/Product/ProductScreen.scss';
 @import '../views/pages/NotFound/Error404Screen.scss';
