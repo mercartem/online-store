@@ -78,10 +78,10 @@ const products: Data = [
   },
   {
     id: 6,
-    title: 'Lamp FC Lokomotiv',
+    title: 'Socks FC Lokomotiv',
     description:
-      'Unique 3D lamp with the emblem of the Locomotive. The lamp can be used as a night light. The lamp consists of an acrylic plate with the club`s logo printed on it and a plastic stand with a hidden LED lamp. The LED lamp illuminates the plate with the emblem from below and creates the effect of a three-dimensional emblem. The lamp has 7 different lighting options, which can be changed by pressing the touch button. There is an automatic color change mode.',
-    price: 2390,
+      'The original Lokomotiv socks are presented in three versions. High quality socks, suitable for both men and women. The original design will complement the image of the Loko fan. Soft and pleasant to the touch, thanks to the use of only high-quality materials.',
+    price: 890,
     discountPercentage: 15,
     stock: 27,
     brand: 'FC Lokomotiv',

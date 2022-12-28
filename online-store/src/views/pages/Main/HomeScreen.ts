@@ -1,4 +1,3 @@
-// import products from '../../../constans/data';
 import { rerender } from '../../../constans/utils';
 import { CartProduct, Screen, Product } from '../../../constans/types/interfaces';
 import { getCartItems, setCartItems } from '../../../constans/localStorage';
@@ -11,6 +10,7 @@ class HomeScreen implements Screen {
   constructor() {
     this.products = filter.getFilterProducts();
   }
+
   addToCart(item: CartProduct, forceUpdate = false) {
     let cartItems: CartProduct[] = getCartItems();
     const existItem = cartItems.find((x) => x.product === item.product);
@@ -30,10 +30,12 @@ class HomeScreen implements Screen {
     }
     rerender(header);
   }
+
   removeFromCart(id: number) {
     setCartItems(getCartItems().filter((x) => x.product !== id));
     rerender(header);
   }
+
   public afterRender() {
     filter.afterRender();
     this.products = filter.getFilterProducts();

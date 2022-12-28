@@ -2,12 +2,12 @@
   background-color: var(--dark-color);
 
   &__container {
-    padding-top: 3.5rem;
-    padding-bottom: 3.5rem;
+    padding-top: 1.7rem;
+    padding-bottom: 1.65rem;
 
     @media screen and (max-width: 991px) {
-      padding-top: 1.5rem;
-      padding-bottom: 1.5rem;
+      padding-top: 0;
+      padding-bottom: 0.9rem;
     }
   }
 

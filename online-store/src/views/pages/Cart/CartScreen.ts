@@ -27,10 +27,59 @@ class CartScreen implements Screen {
     this.codes = [];
     this.appliedPromo = [];
   }
+
   openModal() {
     const modal = document.querySelector('.modal') as HTMLDivElement;
     document.body.style.overflow = 'hidden';
     modal.classList.add('modal-open');
+  }
+
+  searchPromo(code: string) {
+    if (code === 'RS' || code === 'EPM') {
+      if (!this.codes.includes(code)) {
+        this.codes.push(code);
+        rerender(cartScreen);
+      }
+    }
+  }
+
+  applyPromo(i: number) {
+    if (this.appliedPromo.includes(this.codes[i])) {
+      const index = this.appliedPromo.indexOf(this.codes[i]);
+      if (index !== -1) {
+        this.appliedPromo.splice(index, 1);
+      }
+      this.promo += -10;
+    } else {
+      this.promo += 10;
+      this.appliedPromo.push(this.codes[i]);
+    }
+    rerender(cartScreen);
+  }
+
+  addQty(e: Event) {
+    const items = getCartItems();
+    const target = e.target as HTMLElement;
+    const id = Number(target.id);
+    const item = items.find((x) => x.product === id) as CartProduct;
+    const qtyCount = item.qty < item.stock ? item.qty + 1 : item.qty;
+    homeScreen.addToCart({ ...item, qty: qtyCount }, true);
+  }
+
+  removeQty(e: Event) {
+    const items = getCartItems();
+    const target = e.target as HTMLElement;
+    const id = Number(target.id);
+    const item = items.find((x) => x.product === id) as CartProduct;
+    const qtyCount = item.qty - 1;
+    if (qtyCount < 1) {
+      homeScreen.removeFromCart(item.product);
+      this.page =
+        this.page <= Math.ceil(getCartItems().length / this.limit) || this.page === 1 ? this.page : this.page - 1;
+      rerender(cartScreen);
+    } else {
+      homeScreen.addToCart({ ...item, qty: qtyCount }, true);
+    }
   }
 
   afterRender() {
@@ -43,44 +92,36 @@ class CartScreen implements Screen {
     const input = document.querySelector('.order__input') as HTMLInputElement;
     const add: NodeListOf<HTMLElement> = document.querySelectorAll('.add');
     const btn = document.querySelector('.catalog') as HTMLElement;
+    const modalView = document.querySelector('.product-order__one-click') as HTMLButtonElement;
 
+    // Проверяем наличие элемента
     if (btn) {
       btn.addEventListener('click', () => {
         document.location.hash = `/`;
       });
     } else {
+      // Рендерим действия модального окна
       modal.afterRender();
 
-      (document.querySelector('.product-order__one-click') as HTMLButtonElement).addEventListener('click', () => {
+      // Обработка события кнопки перехода к модальному окну
+      modalView.addEventListener('click', () => {
         this.openModal();
       });
 
+      // Обработка события формы поиска промокодов
       form.addEventListener('submit', () => {
         const code = input.value;
-        if (code === 'RS' || code === 'EPM') {
-          if (!this.codes.includes(code)) {
-            this.codes.push(code);
-            rerender(cartScreen);
-          }
-        }
+        this.searchPromo(code);
       });
 
+      // Обработка события кнопки применения промокодов
       for (let i = 0; i < add.length; i++) {
         add[i].addEventListener('click', () => {
-          if (this.appliedPromo.includes(this.codes[i])) {
-            const index = this.appliedPromo.indexOf(this.codes[i]);
-            if (index !== -1) {
-              this.appliedPromo.splice(index, 1);
-            }
-            this.promo += -10;
-          } else {
-            this.promo += 10;
-            this.appliedPromo.push(this.codes[i]);
-          }
-          rerender(cartScreen);
+          this.applyPromo(i);
         });
       }
 
+      // Обработка событий кнопок переключения страниц
       rightArrow.addEventListener('click', () => {
         this.page < getCartItems().length / this.limit ? this.page++ : this.page;
         document.location.hash = `/cart?limit=${this.limit}&page=${this.page}`;
@@ -90,6 +131,7 @@ class CartScreen implements Screen {
         document.location.hash = `/cart?limit=${this.limit}&page=${this.page}`;
       });
 
+      // Обработка событий кнопок смены лимита товаров
       select.addEventListener('change', (e) => {
         const target = e.target as HTMLInputElement;
         this.limit = Number(target.value);
@@ -97,29 +139,13 @@ class CartScreen implements Screen {
         document.location.hash = `/cart?limit=${Number(target.value)}`;
       });
 
+      // Обработка событий кнопок изменения кол-ва товаров
       for (let i = 0; i < btnPlus.length; i++) {
         btnPlus[i].addEventListener('click', (e) => {
-          const items = getCartItems();
-          const target = e.target as HTMLElement;
-          const id = Number(target.id);
-          const item = items.find((x) => x.product === id) as CartProduct;
-          const qtyCount = item.qty < item.stock ? item.qty + 1 : item.qty;
-          homeScreen.addToCart({ ...item, qty: qtyCount }, true);
+          this.addQty(e);
         });
         btnMinus[i].addEventListener('click', (e) => {
-          const items = getCartItems();
-          const target = e.target as HTMLElement;
-          const id = Number(target.id);
-          const item = items.find((x) => x.product === id) as CartProduct;
-          const qtyCount = item.qty - 1;
-          if (qtyCount < 1) {
-            homeScreen.removeFromCart(item.product);
-            this.page =
-              this.page <= Math.ceil(getCartItems().length / this.limit) || this.page === 1 ? this.page : this.page - 1;
-            rerender(cartScreen);
-          } else {
-            homeScreen.addToCart({ ...item, qty: qtyCount }, true);
-          }
+          this.removeQty(e);
         });
       }
     }

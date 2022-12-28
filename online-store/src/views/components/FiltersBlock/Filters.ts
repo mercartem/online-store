@@ -3,7 +3,8 @@ import '../../../constans/types/nouislider';
 import 'nouislider/dist/nouislider.css';
 import { Screen, Product, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
-import { parseRequestUrl } from '../../../constans/utils';
+import { parseRequestUrl, rerender } from '../../../constans/utils';
+import homeScreen from '../../pages/Main/HomeScreen';
 
 class Filter implements Screen {
   url: Route;
@@ -34,18 +35,19 @@ class Filter implements Screen {
       ? Number(this.url.queryParams.qty.split('+')[0])
       : Math.min(...products.map((x) => x.stock));
   }
+
   getFilterProducts() {
     return this.applyFilters();
   }
 
   applyFilters() {
-    this.products = this.filterProductsCheckbox();
-    this.products = this.filterProductsSlider();
+    this.products = this.filterByBrandAndCategory();
+    this.products = this.filterByPriceAndStock();
     this.products = this.searchProducts(this.search);
     return this.products;
   }
 
-  filterProductsCheckbox() {
+  filterByBrandAndCategory() {
     const result = products.filter((x) => {
       if (this.filterBrand.length < 1 && this.filterCategory.length < 1) {
         return true;
@@ -67,7 +69,7 @@ class Filter implements Screen {
     return result;
   }
 
-  filterProductsSlider() {
+  filterByPriceAndStock() {
     const products = this.products;
     return products.filter(
       (x) => x.price >= this.minPrice && x.price <= this.maxPrice && x.stock >= this.minQty && x.stock <= this.maxQty
@@ -129,6 +131,7 @@ class Filter implements Screen {
       document.querySelector('.input-qty__value-2') as HTMLElement,
     ];
 
+    // Обработка событий чекбокса с категориями и брэндами
     for (let i = 0; i < checkbox.length; i++) {
       if (this.filterBrand.includes(checkbox[i].name) || this.filterCategory.includes(checkbox[i].name)) {
         checkbox[i].checked = true;
@@ -145,16 +148,19 @@ class Filter implements Screen {
         }
         this.products =
           this.filterBrand.length < 1 || this.filterCategory.length < 1
-            ? this.filterProductsCheckbox()
-            : this.filterProductsSlider();
+            ? this.filterByBrandAndCategory()
+            : this.filterByPriceAndStock();
         this.setSliderValue();
-        document.location.hash = `/?category=${this.filterCategory.join('+')}&brand=${this.filterBrand
+        document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
           .join('+')
           .split(' ')
-          .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}`;
+          .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+          this.search
+        }`;
       });
     }
 
+    // Форматирования числа для noUiSlider
     const formatForSlider = {
       from: function (formattedValue: string) {
         return Number(formattedValue);
@@ -164,6 +170,7 @@ class Filter implements Screen {
       },
     };
 
+    // Создание двойных слайдеров
     noUiSlider.create(price, {
       start: [this.minPrice, this.maxPrice],
       step: 1,
@@ -185,6 +192,7 @@ class Filter implements Screen {
       format: formatForSlider,
     });
 
+    // Обработка событий слайдеров
     price.noUiSlider.on('update', function (values: string[], handle: number): void {
       priceValues[handle].innerHTML = values[handle];
     });
@@ -194,7 +202,9 @@ class Filter implements Screen {
       document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
         .join('+')
         .split(' ')
-        .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}`;
+        .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+        filter.search
+      }`;
     });
 
     qty.noUiSlider.on('update', function (values: string[], handle: number): void {
@@ -206,13 +216,16 @@ class Filter implements Screen {
       document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
         .join('+')
         .split(' ')
-        .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}`;
+        .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+        filter.search
+      }`;
     });
 
+    // Обработка события поиска
     search.value = this.search;
     search.focus();
     search.addEventListener('input', () => {
-      this.products = search.value.length < this.search.length ? this.filterProductsCheckbox() : this.applyFilters();
+      this.products = search.value.length < this.search.length ? this.filterByBrandAndCategory() : this.applyFilters();
       this.products = this.searchProducts(search.value);
       this.setSliderValue();
       this.search = search.value;
@@ -224,17 +237,21 @@ class Filter implements Screen {
       }`;
     });
 
+    // Обработка события кнопки сброса
     btnReset.addEventListener('click', () => {
       this.resetFilters();
       document.location.hash = '/';
+      rerender(homeScreen);
     });
 
+    // Обработка события кнопки копирования
     btnCopy.addEventListener('click', () => {
       this.copyUrl();
       btnCopy.innerHTML = 'COPIED!';
       btnCopy.classList.add('btn_disabled');
     });
   }
+
   render() {
     return `
     <div class="filter__container">
