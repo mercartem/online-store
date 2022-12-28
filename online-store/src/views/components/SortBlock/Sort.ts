@@ -5,17 +5,21 @@ import { parseRequestUrl } from '../../../constans/utils';
 class Sort implements Screen {
   products: Product[];
   url: Route;
-  sortProducts: string[];
-  viewProducts: string[];
+  sortProducts: string;
+  viewProducts: string;
 
   constructor() {
     this.url = parseRequestUrl();
     this.products = products;
-    this.sortProducts = [];
-    this.viewProducts = [];
+    this.sortProducts = this.url.queryParams.sort ? this.url.queryParams.sort : '';
+    this.viewProducts = this.url.queryParams.view ? this.url.queryParams.view : 'block';
   }
 
   getSortProducts() {
+    // if (this.url.queryParams.sort) {
+    //   console.log(this.url.queryParams.sort);
+    //   // this.sort(this.url.queryParams.sort);
+    // }
     return this.products;
   }
 
@@ -47,30 +51,41 @@ class Sort implements Screen {
 
     const sortItems = document.querySelectorAll('.sort__item') as NodeListOf<HTMLDivElement>;
     sortItems.forEach((element) => {
-      element.addEventListener('click', (e) => {
+      element.addEventListener('click', () => {
         (document.querySelector('.sort__input') as HTMLInputElement).value = element.innerHTML;
         this.sort(element.id);
+        this.sortProducts = element.id;
+        document.location.hash = `/?sort=${this.sortProducts}&view=${this.viewProducts}`;
       });
+    });
+
+    sortItems.forEach((element) => {
+      if (this.sortProducts === element.id) {
+        // this.sort(element.id);
+        (document.querySelector('.sort__input') as HTMLInputElement).value = element.innerHTML;
+      }
     });
 
     const viewItems = document.querySelectorAll('.view__item') as NodeListOf<HTMLButtonElement>;
     viewItems.forEach((element) => {
       element.addEventListener('click', () => {
-        for (const el of viewItems) {
-          el.classList.remove('view__item-active');
+        if (!element.classList.contains('view__item-active')) {
+          for (const el of viewItems) {
+            el.classList.remove('view__item-active');
+          }
+          element.classList.add('view__item-active');
+          this.viewProducts = element.id;
+          document.location.hash = `/?sort=${this.sortProducts}&view=${this.viewProducts}`;
         }
-        element.classList.add('view__item-active');
       });
     });
 
-    const viewList = document.querySelector('#list') as HTMLButtonElement;
-    viewList.addEventListener('click', () => {
-      (document.querySelector('.products') as HTMLDivElement).classList.add('products-list');
-    });
-
-    const viewBlock = document.querySelector('#block') as HTMLButtonElement;
-    viewBlock.addEventListener('click', () => {
-      (document.querySelector('.products') as HTMLDivElement).classList.remove('products-list');
+    viewItems.forEach((element) => {
+      if (this.viewProducts === element.id) {
+        element.classList.add('view__item-active');
+      } else {
+        element.classList.remove('view__item-active');
+      }
     });
   }
 
@@ -87,7 +102,7 @@ class Sort implements Screen {
         </div>
       </div>
       <div class="sort__view view">
-        <button id="block" class="view__item view__item-active">
+        <button id="block" class="view__item">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5.12954 11.9445C5.12954 12.2871 4.85181 12.5648 4.50926 12.5648H0.620277C0.277721 12.5648 0 12.2871 0 11.9445V8.05552C0 7.71296 0.277721 7.43524 0.620277 7.43524H4.50926C4.85186 7.43524 5.12954 7.71296 5.12954 8.05552V11.9445Z"/>
             <path d="M20.0002 11.9445C20.0002 12.287 19.7225 12.5648 19.3799 12.5648H15.4909C15.1483 12.5648 14.8706 12.287 14.8706 11.9445V8.05546C14.8706 7.7129 15.1483 7.43518 15.4909 7.43518H19.3799C19.7225 7.43518 20.0002 7.7129 20.0002 8.05546V11.9445Z"/>
