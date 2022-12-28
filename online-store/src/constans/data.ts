@@ -136,7 +136,6 @@ const products: Data = [
       '../assets/img/products-9-2.png',
       '../assets/img/products-9-3.png',
       '../assets/img/products-9-4.png',
-      '../assets/img/products-9-5.png',
     ],
   },
   {
@@ -155,7 +154,6 @@ const products: Data = [
       '../assets/img/products-10-2.png',
       '../assets/img/products-10-3.png',
       '../assets/img/products-10-4.png',
-      '../assets/img/products-10-5.png',
     ],
   },
   {
@@ -213,7 +211,6 @@ const products: Data = [
       '../assets/img/products-14-2.png',
       '../assets/img/products-14-3.png',
       '../assets/img/products-14-4.png',
-      '../assets/img/products-14-5.png',
     ],
   },
   {
@@ -275,7 +272,6 @@ const products: Data = [
       '../assets/img/products-18-2.png',
       '../assets/img/products-18-3.png',
       '../assets/img/products-18-4.png',
-      '../assets/img/products-18-5.png',
     ],
   },
   {

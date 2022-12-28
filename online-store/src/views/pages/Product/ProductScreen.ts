@@ -132,7 +132,10 @@ class ProductScreen implements Screen {
     rerender(header);
     return `
     <div class="page__container container">
-        <ul class="breadcrumbs">
+    ${
+      products.length <= id
+        ? `<div class="font_XXL">Product ${id + 1} not found</div>`
+        : `<ul class="breadcrumbs">
           <li class="breadcrumbs__item">
             <a href="/#/" class="font_M breadcrumbs__link">Catalog</a>
           </li>
@@ -241,6 +244,8 @@ class ProductScreen implements Screen {
             </ul>
           </div>
         </div>
+        `
+    }
       </div>
     `;
   }
