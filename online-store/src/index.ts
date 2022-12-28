@@ -8,7 +8,6 @@ import ProductScreen from './views/pages/Product/ProductScreen';
 import error404Screen from './views/pages/NotFound/Error404Screen';
 import cartScreen from './views/pages/Cart/CartScreen';
 
-
 const productScreen: ProductScreen = new ProductScreen();
 
 const routes: Record<string, Screen> = {
@@ -19,6 +18,7 @@ const routes: Record<string, Screen> = {
 };
 
 const router = (): void => {
+  window.scrollTo(0, 0);
   const request: Route = parseRequestUrl();
   const parseUrl: string =
     (request.resource ? `${request.resource}` : '/') +

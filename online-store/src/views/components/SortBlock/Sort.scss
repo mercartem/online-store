@@ -1,0 +1,135 @@
+.sort {
+  &__container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__dropdown {
+    position: relative;
+    width: 28rem;
+    height: 3.2rem;
+    font-weight: 400;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 1.6rem;
+      right: 3.2rem;
+      width: 12px;
+      height: 2px;
+      border-radius: 1rem;
+      background: var(--dark-color);
+      z-index: 10;
+      transform: rotate(40deg);
+      transition: 0.3s;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 1.6rem;
+      right: 2.4rem;
+      width: 12px;
+      height: 2px;
+      border-radius: 1rem;
+      background: var(--dark-color);
+      z-index: 10;
+      transform: rotate(-40deg);
+      transition: 0.3s;
+    }
+
+    input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      border-radius: 1rem;
+      padding: 0.8rem 2rem;
+      background: var(--white-color);
+      box-shadow: 0rem 0.4rem 1.4rem rgba(0, 0, 0, 0.1);
+      outline: none;
+      border: none;
+    }
+
+    &-active {
+      &::before {
+        right: 2.4rem;
+      }
+
+      &::after {
+        right: 3.2rem;
+      }
+
+      .sort__options {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+
+  &__options {
+    position: absolute;
+    top: 5rem;
+    width: 100%;
+    background: var(--white-color);
+    border-radius: 1rem;
+    box-shadow: 0rem 0.4rem 1.4rem rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.35s ease;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    height: 4.4rem;
+    cursor: pointer;
+    padding: 1.6rem 1rem;
+    transition: 0.2s ease;
+
+    &:hover {
+      background: var(--red-color);
+      color: var(--white-color);
+    }
+  }
+}
+
+.view {
+  display: flex;
+  padding: 0.2rem;
+  gap: 0.6rem;
+  background-color: var(--gray-color-light);
+  border-radius: 4.5rem;
+  box-shadow: 0rem 0.4rem 1.4rem rgba(0, 0, 0, 0.1);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    border-radius: 4.5rem;
+    padding: 0.4rem 1.4rem;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.35s ease;
+
+    svg {
+      width: 1.6rem;
+      height: 1.6rem;
+      fill: var(--dark-color);
+      transition: fill 0.35s ease;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &-active {
+      background-color: var(--red-color);
+      svg {
+        fill: var(--white-color);
+      }
+    }
+  }
+}

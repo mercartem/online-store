@@ -142,7 +142,7 @@ class CartScreen implements Screen {
     <div class="page__container container shopping__container">
       <div class= "cart">
         <div class="cart__page">
-          <h2>
+          <h2 class="cart__items font_XS">
             ITEMS: 
             <select class="select">
               ${[...Array(cartItems.length).keys()].map((x) => {
@@ -162,13 +162,15 @@ class CartScreen implements Screen {
               })}
             </select>
           </h2>
-          <h2 class="cart__pgn">PAGE:<span class="left-arrow"></span>${this.page}<span class="right-arrow"></span></h2>
+          <h2 class="cart__pgn font_XS">PAGE:
+            <span class="left-arrow"></span>${this.page}<span class="right-arrow"></span>
+          </h2>
         </div>
         <div class="cart__info">
-          <h2 class="cart__info-product">PRODUCT</h2>
-          <h2 class="cart__info-price">PRICE</h2>
-          <h2 class="cart__info-qty">QUANTITY</h2>
-          <h2 class="cart__info-total">TOTAL</h2>
+          <h2 class="cart__info-product font_XS">PRODUCT</h2>
+          <h2 class="cart__info-price font_XS">PRICE</h2>
+          <h2 class="cart__info-qty font_XS">QUANTITY</h2>
+          <h2 class="cart__info-total font_XS">TOTAL</h2>
         </div>
         <ul class="cart__items">
           ${cartItems
@@ -178,14 +180,14 @@ class CartScreen implements Screen {
               <a class="cart__product" href="/#/product/${x.product}">
                 <h4>${i + 1}.</h4>
                 <img src="${x.image}" alt="${x.title}" />
-                <div class="cart__about">
-                  <h3 class="font_S">${x.title}</h3>
+                <div class="cart__about about">
+                  <h3 class="font_XS about__title">${x.title}</h3>
                   <p class="font_XS">${x.category}</p>
                   <p class="font_XS">in stock: ${x.stock}</p>
                 </div>
               </a>
               <div class="cart__price">${x.price} ₽</div>
-              <div class="cart__qty font_S"><span class="minus" id="${x.product}"></span>${
+              <div class="cart__qty font_XS"><span class="minus" id="${x.product}"></span>${
                 x.qty
               }<span class="plus" id="${x.product}"></div>
               <div class="cart__total">${x.price * x.qty} ₽</div>
@@ -197,7 +199,7 @@ class CartScreen implements Screen {
         </ul>
       </div>
       <div class="order">
-        <h2 class="order__title">YOUR ORDER</h2>
+        <h2 class="order__title font_S">YOUR ORDER</h2>
         <div class="order__items font_XS">
           <div>ITEMS:</div>
           <div>${cartItems.reduce((a, c) => a + c.qty, 0)}</div>
