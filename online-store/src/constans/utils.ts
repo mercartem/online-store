@@ -1,5 +1,5 @@
-import { Header } from '../views/components/Header/header';
 import { Route, Screen } from './types/interfaces';
+import { Header } from '../views/components/Header/Header';
 
 export const parseRequestUrl = (): Route => {
   const address = document.location.hash.slice(1).split('?')[0];
@@ -8,13 +8,16 @@ export const parseRequestUrl = (): Route => {
   const url = address.toLowerCase() || '/';
   const r = url.split('/');
   const queryParams: { [key: string]: string } = {};
+
   if (queryString) {
     const queries = queryString.split('&');
+
     queries.forEach((query) => {
       const [name, value] = query.split('=');
       queryParams[name] = value;
     });
   }
+
   return {
     resource: r[1],
     id: r[2],
@@ -26,11 +29,13 @@ export const parseRequestUrl = (): Route => {
 export const rerender = (component: Screen): void => {
   const main = document.querySelector('.page') as HTMLElement;
   const header = document.querySelector('.header') as HTMLElement;
+
   if (component instanceof Header) {
     header.innerHTML = component.render();
   } else {
     main.innerHTML = component.render();
   }
+
   if (component.afterRender) {
     component.afterRender();
   }
