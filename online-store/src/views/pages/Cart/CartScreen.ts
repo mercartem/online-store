@@ -1,9 +1,8 @@
 import { Screen, Route, CartProduct } from '../../../constans/types/interfaces';
 import { getCartItems } from '../../../constans/localStorage';
-import homeScreen from '../Main/HomeScreen';
-import { rerender } from '../../../constans/utils';
-import { parseRequestUrl } from '../../../constans/utils';
+import { parseRequestUrl, rerender } from '../../../constans/utils';
 import header from '../../components/Header/header';
+import homeScreen from '../Main/HomeScreen';
 import modal from '../../components/Modal/Modal';
 
 class CartScreen implements Screen {
@@ -13,6 +12,7 @@ class CartScreen implements Screen {
   promo: number;
   codes: string[];
   appliedPromo: string[];
+
   constructor() {
     this.url = parseRequestUrl();
     this.limit =
@@ -29,6 +29,10 @@ class CartScreen implements Screen {
   }
 
   openModal() {
+    const section__input = document.querySelectorAll('.form-input') as NodeListOf<HTMLDivElement>;
+    for (let i = 0; i < section__input.length; i++) {
+      section__input[i].classList.remove('error');
+    }
     const modal = document.querySelector('.modal') as HTMLDivElement;
     document.body.style.overflow = 'hidden';
     modal.classList.add('modal-open');
@@ -49,28 +53,31 @@ class CartScreen implements Screen {
       if (index !== -1) {
         this.appliedPromo.splice(index, 1);
       }
+
       this.promo += -10;
     } else {
       this.promo += 10;
       this.appliedPromo.push(this.codes[i]);
     }
+
     rerender(cartScreen);
   }
 
-  addQty(e: Event) {
+  itemQty(e: Event) {
     const items = getCartItems();
     const target = e.target as HTMLElement;
     const id = Number(target.id);
-    const item = items.find((x) => x.product === id) as CartProduct;
+    return items.find((x) => x.product === id) as CartProduct;
+  }
+
+  addQty(e: Event) {
+    const item = this.itemQty(e);
     const qtyCount = item.qty < item.stock ? item.qty + 1 : item.qty;
     homeScreen.addToCart({ ...item, qty: qtyCount }, true);
   }
 
   removeQty(e: Event) {
-    const items = getCartItems();
-    const target = e.target as HTMLElement;
-    const id = Number(target.id);
-    const item = items.find((x) => x.product === id) as CartProduct;
+    const item = this.itemQty(e);
     const qtyCount = item.qty - 1;
     if (qtyCount < 1) {
       homeScreen.removeFromCart(item.product);
@@ -83,20 +90,20 @@ class CartScreen implements Screen {
   }
 
   afterRender() {
-    const btnPlus: NodeListOf<HTMLElement> = document.querySelectorAll('.plus');
-    const btnMinus: NodeListOf<HTMLElement> = document.querySelectorAll('.minus');
+    const btnPlus = document.querySelectorAll('.plus') as NodeListOf<HTMLElement>;
+    const btnMinus = document.querySelectorAll('.minus') as NodeListOf<HTMLElement>;
     const rightArrow = document.querySelector('.right-arrow') as HTMLElement;
     const leftArrow = document.querySelector('.left-arrow') as HTMLElement;
-    const select = document.querySelector('.select') as HTMLElement;
-    const form = document.querySelector('.order__promo') as HTMLFormElement;
-    const input = document.querySelector('.order__input') as HTMLInputElement;
-    const add: NodeListOf<HTMLElement> = document.querySelectorAll('.add');
-    const btn = document.querySelector('.catalog') as HTMLElement;
+    const selectItems = document.querySelector('.select') as HTMLElement;
+    const formOrder = document.querySelector('.order__promo') as HTMLFormElement;
+    const inputOrder = document.querySelector('.order__input') as HTMLInputElement;
+    const addPromocode = document.querySelectorAll('.add') as NodeListOf<HTMLElement>;
+    const buttonEmpty = document.querySelector('.error__btn') as HTMLElement;
     const modalView = document.querySelector('.product-order__one-click') as HTMLButtonElement;
 
     // Проверяем наличие элемента
-    if (btn) {
-      btn.addEventListener('click', () => {
+    if (buttonEmpty) {
+      buttonEmpty.addEventListener('click', () => {
         document.location.hash = `/`;
       });
     } else {
@@ -109,14 +116,14 @@ class CartScreen implements Screen {
       });
 
       // Обработка события формы поиска промокодов
-      form.addEventListener('submit', () => {
-        const code = input.value;
+      formOrder.addEventListener('submit', () => {
+        const code = inputOrder.value;
         this.searchPromo(code);
       });
 
       // Обработка события кнопки применения промокодов
-      for (let i = 0; i < add.length; i++) {
-        add[i].addEventListener('click', () => {
+      for (let i = 0; i < addPromocode.length; i++) {
+        addPromocode[i].addEventListener('click', () => {
           this.applyPromo(i);
         });
       }
@@ -132,7 +139,7 @@ class CartScreen implements Screen {
       });
 
       // Обработка событий кнопок смены лимита товаров
-      select.addEventListener('change', (e) => {
+      selectItems.addEventListener('change', (e) => {
         const target = e.target as HTMLInputElement;
         this.limit = Number(target.value);
         this.page = this.page <= Math.ceil(getCartItems().length / this.limit) ? this.page : 1;
@@ -153,13 +160,14 @@ class CartScreen implements Screen {
   render() {
     rerender(header);
     const cartItems = getCartItems();
+
     return cartItems.length < 1
       ? `
       <div class="page__container main__container container">
         <div class="error">
           <div class="error__info">
             <h1 class="error__title font_XXL">Cart is empty...</h1>
-            <button class="btn btn_L btn_primary catalog">Go to catalog</button>
+            <button class="error__btn btn btn_L btn_primary">Go to catalog</button>
           </div>
         <div>
       </div>`
