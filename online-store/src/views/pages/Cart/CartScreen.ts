@@ -1,7 +1,7 @@
 import { Screen, Route, CartProduct } from '../../../constans/types/interfaces';
 import { getCartItems } from '../../../constans/localStorage';
 import { parseRequestUrl, rerender } from '../../../constans/utils';
-import header from '../../components/Header/header';
+import header from '../../components/Header/Header';
 import homeScreen from '../Main/HomeScreen';
 import modal from '../../components/Modal/Modal';
 
