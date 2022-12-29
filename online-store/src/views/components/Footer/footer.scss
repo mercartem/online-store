@@ -12,14 +12,14 @@
   }
 
   &__logo {
-    margin-bottom: 3rem;
+    margin-bottom: 2.4rem;
     @media screen and (max-width: 991px) {
       margin-bottom: 1rem;
     }
   }
 
   &__nav {
-    margin-bottom: 3rem;
+    margin-bottom: 2.4rem;
 
     @media screen and (max-width: 991px) {
       margin-bottom: 1.5rem;
@@ -78,10 +78,10 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  margin-right: -18.5rem;
+  margin-left: 12rem;
 
   @media screen and (max-width: 991px) {
-    margin-right: 0;
+    margin-left: 0;
   }
 
   &__item {

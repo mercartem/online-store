@@ -1,11 +1,10 @@
-import { getCartItems } from '../../../constans/localStorage';
 import { Screen } from '../../../constans/types/interfaces';
+import { getCartItems } from '../../../constans/localStorage';
 
 export class Header implements Screen {
-  afterRender() {}
-
   render() {
     const cartItems = getCartItems();
+
     return `
     <div class="header__container container">
     <div class="header__body">

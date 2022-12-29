@@ -1,6 +1,6 @@
 import { Screen, Product, Route } from '../../../constans/types/interfaces';
-import filter from '../FiltersBlock/Filters';
 import { parseRequestUrl } from '../../../constans/utils';
+import filter from '../FiltersBlock/Filters';
 
 class Sort implements Screen {
   products: Product[];
@@ -20,28 +20,54 @@ class Sort implements Screen {
     return this.sort(this.sortProducts);
   }
 
-  public sort(sortProducts: string): Product[] {
+  selectSort(item: HTMLDivElement) {
+    const inputSort = document.querySelector('.sort__input') as HTMLInputElement;
+    inputSort.value = item.innerHTML;
+    this.sort(item.id);
+    this.sortProducts = item.id;
+    document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+      .join('+')
+      .split(' ')
+      .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+      filter.search
+    }&sort=${this.sortProducts}&view=${this.viewProducts}`;
+  }
+
+  sort(sortProducts: string): Product[] {
     switch (sortProducts) {
+      case 'priceHigh':
+        return this.products.sort((a, b) => Number(a.price) - Number(b.price));
+      case 'priceLow':
+        return this.products.sort((a, b) => Number(b.price) - Number(a.price));
       case 'nameAZ':
         return this.products.sort((a, b) => a.title.localeCompare(b.title));
       case 'nameZA':
         return this.products.sort((a, b) => b.title.localeCompare(a.title));
-      case 'priceLow':
-        return this.products.sort((a, b) => Number(b.price) - Number(a.price));
-      case 'priceHigh':
-        return this.products.sort((a, b) => Number(a.price) - Number(b.price));
       default:
         return this.products;
     }
   }
 
-  public afterRender(): void {
+  selectView(item: HTMLButtonElement) {
+    this.viewProducts = item.id;
+    document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+      .join('+')
+      .split(' ')
+      .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+      filter.search
+    }&sort=${this.sortProducts}&view=${this.viewProducts}`;
+  }
+
+  afterRender() {
     this.products = filter.getFilterProducts();
+
+    // Обработчик события открытия списка сортировки
     const dropdown = document.querySelector('.sort__dropdown') as HTMLDivElement;
     dropdown.addEventListener('click', () => {
       dropdown.classList.toggle('sort__dropdown-active');
     });
 
+    // Обработчик события закрытия списка сортировка не по элементу
     document.body.addEventListener('click', (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!dropdown.contains(target)) {
@@ -49,24 +75,19 @@ class Sort implements Screen {
       }
     });
 
+    // Обработчик события выбора сортировки
     const sortItems = document.querySelectorAll('.sort__item') as NodeListOf<HTMLDivElement>;
     sortItems.forEach((element) => {
       element.addEventListener('click', () => {
-        (document.querySelector('.sort__input') as HTMLInputElement).value = element.innerHTML;
-        this.sort(element.id);
-        this.sortProducts = element.id;
-        document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
-          .join('+')
-          .split(' ')
-          .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
-          filter.search
-        }&sort=${this.sortProducts}&view=${this.viewProducts}`;
+        this.selectSort(element);
       });
     });
 
+    // Выбранная сортировка
     sortItems.forEach((element) => {
       if (this.sortProducts === element.id) {
-        (document.querySelector('.sort__input') as HTMLInputElement).value = element.innerHTML;
+        const inputSort = document.querySelector('.sort__input') as HTMLInputElement;
+        inputSort.value = element.innerHTML;
       }
     });
 
@@ -77,18 +98,14 @@ class Sort implements Screen {
           for (const el of viewItems) {
             el.classList.remove('view__item-active');
           }
+
           element.classList.add('view__item-active');
-          this.viewProducts = element.id;
-          document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
-            .join('+')
-            .split(' ')
-            .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
-            filter.search
-          }&sort=${this.sortProducts}&view=${this.viewProducts}`;
+          this.selectView(element);
         }
       });
     });
 
+    // Выбранный вид продукта
     viewItems.forEach((element) => {
       if (this.viewProducts === element.id) {
         element.classList.add('view__item-active');
@@ -98,7 +115,7 @@ class Sort implements Screen {
     });
   }
 
-  public render(): string {
+  render() {
     return `
     <div class="sort__container">
       <div class="sort__dropdown font_S">

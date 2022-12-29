@@ -17,11 +17,15 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  min-width: 320px;
   background-color: var(--bg-color);
   font-family: var(--font-family);
   font-weight: 400;
   color: var(--black-color);
-  height: 100vh;
 }
 
 ul,
@@ -47,17 +51,18 @@ img {
   margin-top: 8rem;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-areas:
-    'header'
-    'main'
-    'footer';
-  grid-template-columns: 1fr;
-  // Футер прижимается к хэдеру
-  // grid-template-rows: 8rem 1fr 20rem;
-  height: 100%;
-}
+// #app {
+
+//   // display: grid;
+//   // grid-template-areas:
+//   //   'header'
+//   //   'main'
+//   //   'footer';
+//   // grid-template-columns: 1fr;
+//   // Футер прижимается к хэдеру
+//   // grid-template-rows: 8rem 1fr 20rem;
+//   // height: 100%;
+// }
 
 .container {
   width: 100%;
@@ -223,7 +228,7 @@ img {
 
 .btn_outline {
   color: var(--red-color);
-  border: 1px solid var(--red-color);
+  border: 0.1rem solid var(--red-color);
 
   &:hover {
     color: var(--black-color);
@@ -234,16 +239,16 @@ img {
     cursor: default;
     pointer-events: none;
     color: var(--gray-color);
-    border: 1px solid var(--gray-color);
+    border: 0.1rem solid var(--gray-color);
   }
 }
 
-@import '../views/components/Header/header.scss';
+@import '../views/components/Header/Header.scss';
 @import '../views/components/Footer/footer.scss';
 @import '../views/pages/Main/HomeScreen.scss';
 @import '../views/components/FiltersBlock/filters.scss';
 @import '../views/components/SortBlock/Sort.scss';
 @import '../views/pages/Product/ProductScreen.scss';
 @import '../views/pages/NotFound/Error404Screen.scss';
-@import '../views/pages/Cart/CartScreen.scss';
+@import '../views/pages/Cart/СartScreen.scss';
 @import '../views/components/Modal/Modal.scss';
