@@ -111,6 +111,10 @@
   height: 50rem;
   padding: 2rem 1rem;
 
+  &__name {
+    text-align: center;
+  }
+
   &__info {
     display: flex;
     flex-direction: column;

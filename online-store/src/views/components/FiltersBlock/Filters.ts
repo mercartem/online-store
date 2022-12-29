@@ -324,7 +324,7 @@ class Filter implements Screen {
             <span></span>
             FC Lokomotiv
           </div>
-          <div>(${this.products.filter((x) => x.brand === 'FC Lokomotiv').length}/1)</div>
+          <div>(${this.products.filter((x) => x.brand === 'FC Lokomotiv').length}/5)</div>
         </label>
         <label>
           <div>
@@ -332,7 +332,7 @@ class Filter implements Screen {
             <span></span>
             FC Manchester United
           </div>
-          <div>(${this.products.filter((x) => x.brand === 'FC Manchester United').length}/4)</div>
+          <div>(${this.products.filter((x) => x.brand === 'FC Manchester United').length}/5)</div>
         </label>
         <label>
           <div>
@@ -351,7 +351,7 @@ class Filter implements Screen {
             <span></span>
             Balls
           </div>
-          <div>(${this.products.filter((x) => x.category === 'balls').length}/4)</div>
+          <div>(${this.products.filter((x) => x.category === 'balls').length}/5)</div>
         </label>
         <label>
           <div>
@@ -359,7 +359,7 @@ class Filter implements Screen {
             <span></span>
             Uniforms
           </div>
-          <div>(${this.products.filter((x) => x.category === 'uniforms').length}/4)</div>
+          <div>(${this.products.filter((x) => x.category === 'uniforms').length}/5)</div>
         </label>
         <label>
           <div>
@@ -367,7 +367,7 @@ class Filter implements Screen {
             <span></span>
             Scarves
           </div>
-          <div>(${this.products.filter((x) => x.category === 'scarves').length}/4)</div>
+          <div>(${this.products.filter((x) => x.category === 'scarves').length}/5)</div>
         </label>
         <label>
           <div>
@@ -375,7 +375,7 @@ class Filter implements Screen {
             <span></span>
             Hats
           </div>
-          <div>(${this.products.filter((x) => x.category === 'hats').length}/3)</div>
+          <div>(${this.products.filter((x) => x.category === 'hats').length}/5)</div>
         </label>
         <label>
           <div>

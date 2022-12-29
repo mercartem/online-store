@@ -300,6 +300,76 @@ const products: Data = [
     thumbnail: '../assets/img/products-20-1.png',
     images: ['../assets/img/products-20-1.png', '../assets/img/products-20-2.png'],
   },
+  {
+    id: 21,
+    title: 'T-shirt FC Lokomotiv',
+    description:
+      'Style, continuity and victory - adidas jersey perfectly combines these three qualities. Made from sweat-wicking Aeroready material with a silky texture, this shirt keeps you dry in all conditions. Choose green and jump into the #НаВсехПарах season! Composition: 100% polyester. Official products of FC Lokomotiv.',
+    price: 4190,
+    discountPercentage: 15,
+    stock: 18,
+    brand: 'FC Lokomotiv',
+    category: 'uniforms',
+    thumbnail: '../assets/img/products-21-1.png',
+    images: ['../assets/img/products-21-1.png', '../assets/img/products-21-2.png', '../assets/img/products-21-3.png'],
+  },
+  {
+    id: 22,
+    title: 'Scarf FC Lokomotiv',
+    description:
+      'The main attribute of a fan is a scarf! Tight knitting and a combination of red-green colors - all this makes the scarf uniquely brutal. Material: 100% acrylic. Official production of FC Lokomotiv.',
+    price: 990,
+    discountPercentage: 20,
+    stock: 30,
+    brand: 'FC Lokomotiv',
+    category: 'scarves',
+    thumbnail: '../assets/img/products-22-1.png',
+    images: ['../assets/img/products-22-1.png', '../assets/img/products-22-2.png'],
+  },
+  {
+    id: 23,
+    title: 'Ball FC Lokomotiv',
+    description:
+      'An original premium-class souvenir made of high-quality brown genuine leather, which is decorated in a special way with the effect of natural aging. The retro leather soccer ball completely repeats the same leather balls that were played in the period of 1930-1940 of the XX century. The tire cover, as then, is made of genuine leather and consists of 18 sections. Lace-up nipple.',
+    price: 3990,
+    discountPercentage: 20,
+    stock: 1,
+    brand: 'FC Lokomotiv',
+    category: 'balls',
+    thumbnail: '../assets/img/products-23-1.png',
+    images: ['../assets/img/products-23-1.png', '../assets/img/products-23-2.png'],
+  },
+  {
+    id: 24,
+    title: 'Bucket hat FC Lokomotiv',
+    description:
+      'Bucket hat "Hammers" is made of cotton material. Panama is presented in green colors and is decorated with a 3D Sapsan logo. Composition: 100% cotton. Official products of FC Lokomotiv.',
+    price: 590,
+    discountPercentage: 20,
+    stock: 15,
+    brand: 'FC Lokomotiv',
+    category: 'hats',
+    thumbnail: '../assets/img/products-24-1.png',
+    images: ['../assets/img/products-24-1.png', '../assets/img/products-24-2.png'],
+  },
+  {
+    id: 25,
+    title: 'Snapback cap FC Manchester United',
+    description:
+      'Classic-shaped snapback cap is made of beautiful and practical fabric - twill. The fabric has a textured surface with barely noticeable knots. The intricate weave of the fibers gives the surface a smooth and noble sheen, and also makes the fabric durable and breathable. Resistance to sunlight will allow you to enjoy the product for many years.',
+    price: 1990,
+    discountPercentage: 15,
+    stock: 29,
+    brand: 'FC Manchester United',
+    category: 'hats',
+    thumbnail: '../assets/img/products-25-1.png',
+    images: [
+      '../assets/img/products-25-1.png',
+      '../assets/img/products-25-2.png',
+      '../assets/img/products-25-3.png',
+      '../assets/img/products-25-4.png',
+    ],
+  },
 ];
 
 export default products;
