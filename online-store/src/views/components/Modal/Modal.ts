@@ -1,17 +1,16 @@
 import { Screen, PaymentSystem } from '../../../constans/types/interfaces';
 
 export class Modal implements Screen {
-  afterRender() {
-    // Close modal
-    (document.querySelector('.modal__btn') as HTMLButtonElement).addEventListener('click', () => {
-      const modal = document.querySelector('.modal') as HTMLDivElement;
-      modal.classList.remove('modal-open');
-      document.body.style.overflow = '';
-    });
+  closeModal() {
+    const modal = document.querySelector('.modal') as HTMLDivElement;
+    modal.classList.remove('modal-open');
+    document.body.style.overflow = '';
+  }
 
-    // Click card inputs
+  clickInputsCardData() {
     const inputCards = document.querySelectorAll('.card__input') as NodeListOf<HTMLInputElement>;
     const inputsClassCards = document.querySelectorAll('.input-form') as NodeListOf<HTMLDivElement>;
+
     for (let i = 0; i < inputCards.length; i++) {
       inputCards[i].addEventListener('click', () => {
         for (let j = 0; j < inputCards.length; j++) {
@@ -19,229 +18,252 @@ export class Modal implements Screen {
             inputsClassCards[j].classList.remove('input-form-focus');
           }
         }
+
         inputsClassCards[i].classList.add('input-form-focus');
       });
     }
+  }
 
-    const section__input = document.querySelectorAll('.form-input') as NodeListOf<HTMLDivElement>;
-    const modalSections = document.querySelector('.modal__sections') as HTMLDivElement;
-    const fields = modalSections.querySelectorAll('.field') as NodeListOf<HTMLInputElement>;
+  validateName(inName: string, section: HTMLDivElement) {
+    const reName: RegExp = /^\b[A-Za-z]{3,}\b(?: \b[A-Za-z]{3,}\b){1,}$/;
 
-    // Validate Name
-    const inputName = document.querySelector('#name') as HTMLInputElement;
-    function validateName(inName: string) {
-      const reName: RegExp = /^\b[A-Za-z]{3,}\b(?: \b[A-Za-z]{3,}\b){1,}$/;
-
-      if (reName.test(inName)) {
-        section__input[0].classList.remove('error');
-        return true;
-      }
-      section__input[0].classList.add('error');
-      return false;
+    if (reName.test(inName)) {
+      section.classList.remove('error');
+      return true;
     }
-    inputName.addEventListener('input', (e) => {
-      validateName(inputName.value);
+
+    section.classList.add('error');
+    return false;
+  }
+
+  validatePhone(inPhone: string, section: HTMLDivElement) {
+    const rePhone: RegExp = /^\+\d{9,}$/;
+
+    if (rePhone.test(inPhone)) {
+      section.classList.remove('error');
+      return true;
+    }
+
+    section.classList.add('error');
+    return false;
+  }
+
+  validateAddress(inAddress: string, section: HTMLDivElement) {
+    const reAddress: RegExp = /^\b[\w ]{5,}\b(?: \b[\w ]{5,}\b){2,}$/;
+
+    if (reAddress.test(inAddress)) {
+      section.classList.remove('error');
+      return true;
+    }
+
+    section.classList.add('error');
+    return false;
+  }
+
+  validateEmail(inEmail: string, section: HTMLDivElement) {
+    const reEmail: RegExp = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+
+    if (reEmail.test(inEmail)) {
+      section.classList.remove('error');
+      return true;
+    }
+
+    section.classList.add('error');
+    return false;
+  }
+
+  maskCard(value: string, limit: number, separator: string) {
+    let result: string[] = [];
+
+    for (let i = 0; i < value.length; i++) {
+      if (i !== 0 && i % limit === 0) {
+        result.push(separator);
+      }
+
+      result.push(value[i]);
+    }
+
+    return result.join('');
+  }
+
+  payCard(cardNumber: string) {
+    let paymentSystemType: string = '';
+    const ccCardTypePatterns: PaymentSystem<RegExp> = {
+      mir: /^2/,
+      visa: /^4/,
+      mastercard: /^5/,
+    };
+
+    Object.keys(ccCardTypePatterns).forEach((key) => {
+      if (ccCardTypePatterns[key].test(cardNumber)) {
+        paymentSystemType = key;
+      }
     });
 
-    // Validate Phone
-    const inputPhone = document.querySelector('#phone') as HTMLInputElement;
-    function validatePhone(inPhone: string): boolean {
-      const rePhone: RegExp = /^\+\d{9,}$/;
-      if (rePhone.test(inPhone)) {
-        section__input[1].classList.remove('error');
-        return true;
+    const activePaymentSystem = document.querySelector('.card__logo') as HTMLDivElement;
+    Object.keys(ccCardTypePatterns).forEach((key) => {
+      activePaymentSystem.classList.remove(`card__${key}`);
+    });
+
+    if (paymentSystemType) {
+      activePaymentSystem.classList.add(`card__${paymentSystemType}`);
+    }
+  }
+
+  validateCardNumber(inputCardNumber: HTMLInputElement, inCardNumber: string, section: HTMLDivElement) {
+    const reCardNumber: RegExp = /^\d{0,16}$/g;
+    const separatorCardNumber: string = ' ';
+    inCardNumber = inCardNumber.replace(/[^\d]/g, '');
+
+    if (reCardNumber.test(inCardNumber)) {
+      inCardNumber = this.maskCard(inCardNumber, 4, separatorCardNumber);
+      inputCardNumber.value = inCardNumber !== '' ? inCardNumber : '';
+    }
+
+    // Добавление картинки платёжной системы
+    this.payCard(inputCardNumber.value);
+
+    inCardNumber = inCardNumber.replace(/[^\d]/g, '');
+    if (/^\d{16}$/g.test(inCardNumber)) {
+      section.classList.remove('error');
+      return true;
+    }
+
+    section.classList.add('error');
+    return false;
+  }
+
+  validateCardMonth(inputCardMonth: HTMLInputElement, inCardMonth: string, section: HTMLDivElement) {
+    const reCardMonth: RegExp = /^\d{4}$/;
+    const separatorCardMonth: string = '/';
+    inCardMonth = inCardMonth.replace(/[^\d]/g, '');
+
+    if (reCardMonth.test(inCardMonth)) {
+      const month: string = inCardMonth.substring(0, 2);
+      inCardMonth = this.maskCard(inCardMonth, 2, separatorCardMonth);
+      inputCardMonth.value = inCardMonth;
+
+      if (Number(month) > 12 || Number(month) === 0) {
+        section.classList.add('error');
+        return false;
       }
 
-      section__input[1].classList.add('error');
-      return false;
+      section.classList.remove('error');
+      return true;
     }
+
+    inCardMonth = this.maskCard(inCardMonth, 2, separatorCardMonth);
+    inputCardMonth.value = inCardMonth;
+    section.classList.add('error');
+    return false;
+  }
+
+  validateCardCVV(inputCardCVV: HTMLInputElement, inCardCVV: string, section: HTMLDivElement) {
+    const reCardCVV: RegExp = /^\d{3}$/;
+    inCardCVV = inCardCVV.replace(/[^\d]/g, '');
+    inputCardCVV.value = inCardCVV;
+
+    if (reCardCVV.test(inCardCVV)) {
+      section.classList.remove('error');
+      return true;
+    }
+
+    section.classList.add('error');
+    return false;
+  }
+
+  afterRender() {
+    const section__input = document.querySelectorAll('.form-input') as NodeListOf<HTMLDivElement>;
+
+    // Обработка события кнопки (крестик) закрытия модального окна
+    const buttonClose = document.querySelector('.modal__btn') as HTMLButtonElement;
+    buttonClose.addEventListener('click', () => {
+      this.closeModal();
+    });
+
+    // Анимация при клике на поле в Card Data
+    this.clickInputsCardData();
+
+    // Проверка валидации поля "Имя и Фамилия"
+    const inputName = document.querySelector('#name') as HTMLInputElement;
+    inputName.addEventListener('input', () => {
+      this.validateName(inputName.value, section__input[0]);
+    });
+
+    // Проверка валидации поля "Телефон"
+    const inputPhone = document.querySelector('#phone') as HTMLInputElement;
+    inputPhone.addEventListener('input', () => {
+      if (!/^\+\d*$/.test(inputPhone.value)) {
+        inputPhone.value = '+' + inputPhone.value.slice(1);
+      }
+      this.validatePhone(inputPhone.value, section__input[1]);
+    });
+
+    // Добавление к полю "Телефон" символ "+" при фокусировании
     inputPhone.addEventListener('focus', () => {
       if (!/^\+\d*$/.test(inputPhone.value)) {
         inputPhone.value = '+' + inputPhone.value.slice(1);
       }
     });
+
+    // Ввод только цифр для поля "Телефон"
     inputPhone.addEventListener('keypress', (e) => {
       if (!/\d/.test(e.key)) {
         e.preventDefault();
       }
     });
-    inputPhone.addEventListener('input', () => {
-      if (!/^\+\d*$/.test(inputPhone.value)) {
-        inputPhone.value = '+' + inputPhone.value.slice(1);
-      }
-      validatePhone(inputPhone.value);
-    });
 
-    // Validate Address
+    // Проверка валидации поля "Адрес"
     const inputAddress = document.querySelector('#address') as HTMLInputElement;
-    function validateAddress(inAddress: string): boolean {
-      const reAddress: RegExp = /^\b[\w ]{5,}\b(?: \b[\w ]{5,}\b){2,}$/;
-
-      if (reAddress.test(inAddress)) {
-        section__input[2].classList.remove('error');
-        return true;
-      }
-
-      section__input[2].classList.add('error');
-      return false;
-    }
-    inputAddress.addEventListener('input', (e) => {
-      validateAddress(inputAddress.value);
+    inputAddress.addEventListener('input', () => {
+      this.validateAddress(inputAddress.value, section__input[2]);
     });
 
-    // Validate Email
+    // Проверка валидации поля "Email"
     const inputEmail = document.querySelector('#email') as HTMLInputElement;
-    function validateEmail(inEmail: string): boolean {
-      const reEmail: RegExp = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
-
-      if (reEmail.test(inEmail)) {
-        section__input[3].classList.remove('error');
-        return true;
-      }
-
-      section__input[3].classList.add('error');
-      return false;
-    }
     inputEmail.addEventListener('input', () => {
-      validateEmail(inputEmail.value);
+      this.validateEmail(inputEmail.value, section__input[3]);
     });
 
-    // Validate Card Data
-    const mask = (value: string, limit: number, separator: string): string => {
-      let result: string[] = [];
-      for (let i = 0; i < value.length; i++) {
-        if (i !== 0 && i % limit === 0) {
-          result.push(separator);
-        }
-        result.push(value[i]);
-      }
-      return result.join('');
-    };
-    const payCard = (cardNumber: string): void => {
-      let paymentSystemType: string = '';
-      const ccCardTypePatterns: PaymentSystem<RegExp> = {
-        mir: /^2/,
-        visa: /^4/,
-        mastercard: /^5/,
-      };
-
-      Object.keys(ccCardTypePatterns).forEach((key) => {
-        if (ccCardTypePatterns[key].test(cardNumber)) {
-          paymentSystemType = key;
-        }
-      });
-
-      const activePaymentSystem = document.querySelector('.card__logo') as HTMLDivElement;
-      Object.keys(ccCardTypePatterns).forEach((key) => {
-        activePaymentSystem.classList.remove(`card__${key}`);
-      });
-
-      if (paymentSystemType) {
-        activePaymentSystem.classList.add(`card__${paymentSystemType}`);
-      }
-    };
+    // Проверка валидации поля "Номер карты"
     const inputCardNumber = document.querySelector('#card-number') as HTMLInputElement;
-    let ccNumberInputOldValue: string;
-    function validateCardNumber(inCardNumber: string): boolean {
-      const reCardNumber: RegExp = /^\d{0,16}$/g;
-      const separatorCardNumber: string = ' ';
-      inCardNumber = inCardNumber.replace(/[^\d]/g, '');
-
-      if (reCardNumber.test(inCardNumber)) {
-        inCardNumber = mask(inCardNumber, 4, separatorCardNumber);
-        inputCardNumber.value = inCardNumber !== '' ? inCardNumber : '';
-      } else {
-        inputCardNumber.value = ccNumberInputOldValue;
-      }
-      payCard(inputCardNumber.value);
-
-      inCardNumber = inCardNumber.replace(/[^\d]/g, '');
-      if (/^\d{16}$/g.test(inCardNumber)) {
-        section__input[4].classList.remove('error');
-        return true;
-      }
-
-      section__input[4].classList.add('error');
-      return false;
-    }
-    inputCardNumber.addEventListener('keydown', () => {
-      ccNumberInputOldValue = inputCardNumber.value;
-    });
     inputCardNumber.addEventListener('input', () => {
-      validateCardNumber(inputCardNumber.value);
+      this.validateCardNumber(inputCardNumber, inputCardNumber.value, section__input[4]);
     });
 
+    // Проверка валидации поля "MM / YY"
     const inputCardMonth = document.querySelector('#card-month') as HTMLInputElement;
-    function validateCardMonth(inCardMonth: string): boolean {
-      const reCardMonth: RegExp = /^\d{4}$/;
-      const separatorCardMonth: string = '/';
-      inCardMonth = inCardMonth.replace(/[^\d]/g, '');
-
-      if (reCardMonth.test(inCardMonth)) {
-        const month: string = inCardMonth.substring(0, 2);
-        inCardMonth = mask(inCardMonth, 2, separatorCardMonth);
-        inputCardMonth.value = inCardMonth;
-
-        if (Number(month) > 12 || Number(month) === 0) {
-          section__input[5].classList.add('error');
-          return false;
-        }
-
-        section__input[5].classList.remove('error');
-        return true;
-      }
-
-      inCardMonth = mask(inCardMonth, 2, separatorCardMonth);
-      inputCardMonth.value = inCardMonth;
-      section__input[5].classList.add('error');
-      return false;
-    }
     inputCardMonth.addEventListener('input', () => {
-      validateCardMonth(inputCardMonth.value);
+      this.validateCardMonth(inputCardMonth, inputCardMonth.value, section__input[5]);
     });
 
+    // Проверка валидации поля "CVV"
     const inputCardCVV = document.querySelector('#card-cvv') as HTMLInputElement;
-    function validateCardCVV(inCardCVV: string): boolean {
-      const reCardCVV: RegExp = /^\d{3}$/;
-      inCardCVV = inCardCVV.replace(/[^\d]/g, '');
-      inputCardCVV.value = inCardCVV;
-      if (reCardCVV.test(inCardCVV)) {
-        section__input[6].classList.remove('error');
-        return true;
-      }
-
-      section__input[6].classList.add('error');
-      return false;
-    }
     inputCardCVV.addEventListener('input', () => {
-      validateCardCVV(inputCardCVV.value);
+      this.validateCardCVV(inputCardCVV, inputCardCVV.value, section__input[6]);
     });
 
+    // Проверка всей полей при submit
     const modalContainer = document.querySelector('.modal__container') as HTMLDivElement;
     const form = document.getElementById('payment-form') as HTMLFormElement;
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      for (let i = 0; i < fields.length; i++) {
-        if (!fields[i].value) {
-          section__input[i].classList.add('error');
-        }
-      }
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
 
       if (
-        validateName(inputName.value) &&
-        validatePhone(inputPhone.value) &&
-        validateAddress(inputAddress.value) &&
-        validateEmail(inputEmail.value) &&
-        validateCardNumber(inputCardNumber.value) &&
-        validateCardMonth(inputCardMonth.value) &&
-        validateCardCVV(inputCardCVV.value)
+        this.validateName(inputName.value, section__input[0]) &&
+        this.validatePhone(inputPhone.value, section__input[1]) &&
+        this.validateAddress(inputAddress.value, section__input[2]) &&
+        this.validateEmail(inputEmail.value, section__input[3]) &&
+        this.validateCardNumber(inputCardNumber, inputCardNumber.value, section__input[4]) &&
+        this.validateCardMonth(inputCardMonth, inputCardMonth.value, section__input[5]) &&
+        this.validateCardCVV(inputCardCVV, inputCardCVV.value, section__input[6])
       ) {
         modalContainer.innerHTML = '';
         modalContainer.innerHTML = `
         <div class="modal__content-success">
           <h2 class="font_M">The order has been successfully placed!</h2>
         </div>`;
+
         localStorage.clear();
 
         setTimeout(() => {
@@ -249,6 +271,10 @@ export class Modal implements Screen {
           form.submit();
         }, 3000);
       } else {
+        for (let i = 0; i < section__input.length; i++) {
+          section__input[i].classList.add('error');
+        }
+
         return;
       }
     });
