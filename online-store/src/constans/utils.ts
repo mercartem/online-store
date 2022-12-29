@@ -1,5 +1,5 @@
 import { Route, Screen } from './types/interfaces';
-import { Header } from '../views/components/Header/Header';
+import { Header } from '../views/components/Header/header';
 
 export const parseRequestUrl = (): Route => {
   const address = document.location.hash.slice(1).split('?')[0];

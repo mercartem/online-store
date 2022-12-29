@@ -2,7 +2,7 @@ import { rerender } from '../../../constans/utils';
 import { CartProduct, Screen, Product } from '../../../constans/types/interfaces';
 import { getCartItems, setCartItems } from '../../../constans/localStorage';
 import cartScreen from '../Cart/CartScreen';
-import header from '../../components/Header/Header';
+import header from '../../components/Header/header';
 import filter from '../../components/FiltersBlock/Filters';
 import sort from '../../components/SortBlock/Sort';
 
@@ -122,7 +122,7 @@ class HomeScreen implements Screen {
         <div class="sort">${sort.render()}</div>
         ${
           products.length < 1
-            ? `<div class="products font_XXL">Products not found!</div>`
+            ? `<div class="products products-notfound font_XXL">Products not found!</div>`
             : `
         <ul class="products ${sort.viewProducts === 'list' ? 'products-list' : ''}">
           ${products
