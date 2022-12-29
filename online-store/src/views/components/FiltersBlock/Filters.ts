@@ -11,6 +11,8 @@ class Filter implements Screen {
   products: Product[];
   filterCategory: string[];
   filterBrand: string[];
+  sortProducts: string;
+  viewProducts: string;
   maxPrice: number;
   minPrice: number;
   maxQty: number;
@@ -19,6 +21,8 @@ class Filter implements Screen {
   constructor() {
     this.url = parseRequestUrl();
     this.products = products;
+    this.sortProducts = this.url.queryParams.sort ? this.url.queryParams.sort : '';
+    this.viewProducts = this.url.queryParams.view ? this.url.queryParams.view : 'block';
     this.filterBrand = this.url.queryParams.brand ? this.url.queryParams.brand.split('-').join(' ').split('+') : [];
     this.filterCategory = this.url.queryParams.category ? this.url.queryParams.category.split('+') : [];
     this.search = this.url.queryParams.search ? this.url.queryParams.search : '';
@@ -115,6 +119,12 @@ class Filter implements Screen {
     document.body.removeChild(tempInput);
   }
 
+  getQueryParamsFromSort() {
+    this.url = parseRequestUrl();
+    this.sortProducts = this.url.queryParams.sort ? this.url.queryParams.sort : '';
+    this.viewProducts = this.url.queryParams.view ? this.url.queryParams.view : 'block';
+  }
+
   afterRender() {
     const price = document.querySelector('.input-price') as noUiSlider.Instance;
     const qty = document.querySelector('.input-qty') as noUiSlider.Instance;
@@ -130,6 +140,9 @@ class Filter implements Screen {
       document.querySelector('.input-qty__value-1') as HTMLElement,
       document.querySelector('.input-qty__value-2') as HTMLElement,
     ];
+
+    // Получаем актуальные данные параметров из компонента сортировки
+    this.getQueryParamsFromSort();
 
     // Обработка событий чекбокса с категориями и брэндами
     for (let i = 0; i < checkbox.length; i++) {
@@ -151,12 +164,12 @@ class Filter implements Screen {
             ? this.filterByBrandAndCategory()
             : this.filterByPriceAndStock();
         this.setSliderValue();
-        document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+        document.location.hash = `/?category=${this.filterCategory.join('+')}&brand=${this.filterBrand
           .join('+')
           .split(' ')
-          .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+          .join('-')}&price=${this.minPrice}+${this.maxPrice}&qty=${this.minQty}+${this.maxQty}&search=${
           this.search
-        }`;
+        }&sort=${this.sortProducts}&view=${this.viewProducts}`;
       });
     }
 
@@ -204,7 +217,7 @@ class Filter implements Screen {
         .split(' ')
         .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
         filter.search
-      }`;
+      }&sort=${filter.sortProducts}&view=${filter.viewProducts}`;
     });
 
     qty.noUiSlider.on('update', function (values: string[], handle: number): void {
@@ -218,7 +231,7 @@ class Filter implements Screen {
         .split(' ')
         .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
         filter.search
-      }`;
+      }&sort=${filter.sortProducts}&view=${filter.viewProducts}`;
     });
 
     // Обработка события поиска
@@ -229,12 +242,12 @@ class Filter implements Screen {
       this.products = this.searchProducts(search.value);
       this.setSliderValue();
       this.search = search.value;
-      document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+      document.location.hash = `/?category=${this.filterCategory.join('+')}&brand=${this.filterBrand
         .join('+')
         .split(' ')
-        .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
+        .join('-')}&price=${this.minPrice}+${this.maxPrice}&qty=${this.minQty}+${this.maxQty}&search=${
         this.search
-      }`;
+      }&sort=${this.sortProducts}&view=${this.viewProducts}`;
     });
 
     // Обработка события кнопки сброса
@@ -256,6 +269,13 @@ class Filter implements Screen {
     return `
     <div class="filter__container">
       <h2 class="font_M filter__found">Found: ${this.products.length}</h2>
+      <button class="btn_close">
+        <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M6.22566 4.81096C5.83514 4.42044 5.20197 4.42044 4.81145 4.81096C4.42092 5.20148 4.42092 5.83465 4.81145 6.22517L10.5862 11.9999L4.81151 17.7746C4.42098 18.1651 4.42098 18.7983 4.81151 19.1888C5.20203 19.5793 5.8352 19.5793 6.22572 19.1888L12.0004 13.4141L17.7751 19.1888C18.1656 19.5793 18.7988 19.5793 19.1893 19.1888C19.5798 18.7983 19.5798 18.1651 19.1893 17.7746L13.4146 11.9999L19.1893 6.22517C19.5799 5.83465 19.5799 5.20148 19.1893 4.81096C18.7988 4.42044 18.1657 4.42044 17.7751 4.81096L12.0004 10.5857L6.22566 4.81096Z" />
+        </svg>
+      </button>
       <form class="filter__search">
         <div class="search font_S">
           <div class="search__icon"></div>

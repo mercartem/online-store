@@ -8,8 +8,10 @@ import sort from '../../components/SortBlock/Sort';
 
 class HomeScreen implements Screen {
   products: Product[];
+  isFilterBlock: boolean;
   constructor() {
     this.products = sort.getSortProducts();
+    this.isFilterBlock = false;
   }
 
   addToCart(item: CartProduct, forceUpdate = false) {
@@ -44,7 +46,12 @@ class HomeScreen implements Screen {
     this.products = sort.getSortProducts();
 
     const btns = document.querySelectorAll('.btn_primary');
+    const btnFilter = document.querySelector('.burger-filter') as HTMLElement;
+    const btnClose = document.querySelector('.btn_close') as HTMLElement;
+    const filterBlock = document.querySelector('.filter') as HTMLElement;
+    const catalog = document.querySelector('.catalog') as HTMLElement;
 
+    // Обработка событий кнопок добавления в корзину
     for (let i = 0; i < btns.length; i++) {
       const cartItems = getCartItems();
       const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
@@ -80,16 +87,29 @@ class HomeScreen implements Screen {
         }
       });
     }
+
+    // Обработка события кнопки вызова модального окна фильтра
+    if (btnFilter) {
+      btnFilter.addEventListener('click', () => {
+        filterBlock.classList.add('filter_active');
+        catalog.classList.add('catalog_active');
+        this.isFilterBlock = true;
+      });
+      btnClose.addEventListener('click', () => {
+        filterBlock.classList.remove('filter_active');
+        catalog.classList.remove('catalog_active');
+        this.isFilterBlock = false;
+      });
+    }
   }
 
   public render() {
     const products = sort.getSortProducts();
-    console.log(products);
     rerender(header);
     return `
     <div class="page__container main__container container">
-      <div class="filter">${filter.render()}</div>
-      <div class="catalog">
+      <div class="filter ${this.isFilterBlock ? 'filter_active' : ''}">${filter.render()}</div>
+      <div class="catalog ${this.isFilterBlock ? 'catalog_active' : ''}">
         <div class="sort">${sort.render()}</div>
         ${
           products.length < 1
