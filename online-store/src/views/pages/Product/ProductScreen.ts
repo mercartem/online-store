@@ -8,65 +8,8 @@ import cartScreen from '../Cart/CartScreen';
 import header from '../../components/Header/header';
 
 class ProductScreen implements Screen {
-  public afterRender(): void {
-    const request: Route = parseRequestUrl();
-    const id: number = Number(request.id);
-    const btn = document.querySelector('.btn_L') as HTMLElement;
-    const cartItems = getCartItems();
-    const existItem = cartItems.find((x) => x.product === id);
-    if (existItem) {
-      btn.textContent = 'DROP FROM CART';
-      btn.classList.add('btn_primary_disabled');
-    } else {
-      btn.textContent = 'ADD TO CART';
-      btn.classList.remove('btn_primary_disabled');
-    }
-
-    (document.querySelector('.product-order__one-click') as HTMLDivElement).addEventListener('click', () => {
-      document.location.hash = `/cart`;
-      const product = products[id - 1];
-      const cartItems = getCartItems();
-      const existItem = cartItems.find((x) => x.product === id);
-      if (!existItem) {
-        homeScreen.addToCart({
-          product: product.id,
-          title: product.title,
-          image: product.thumbnail,
-          price: product.price,
-          category: product.category,
-          stock: product.stock,
-          qty: 1,
-        });
-        btn.textContent = 'DROP FROM CART';
-        btn.classList.add('btn_primary_disabled');
-      }
-      setTimeout(cartScreen.openModal, 100);
-    });
-
-    btn.addEventListener('click', () => {
-      const product = products[id - 1];
-      const cartItems = getCartItems();
-      const existItem = cartItems.find((x) => x.product === id);
-      if (existItem) {
-        btn.textContent = 'ADD TO CART';
-        btn.classList.remove('btn_primary_disabled');
-        homeScreen.removeFromCart(existItem.product);
-      } else {
-        homeScreen.addToCart({
-          product: product.id,
-          title: product.title,
-          image: product.thumbnail,
-          price: product.price,
-          category: product.category,
-          stock: product.stock,
-          qty: 1,
-        });
-        btn.textContent = 'DROP FROM CART';
-        btn.classList.add('btn_primary_disabled');
-      }
-    });
-
-    const thumbSwiper: Swiper = new Swiper('.thumbs .swiper-container', {
+  slider() {
+    const thumbsSlider: Swiper = new Swiper('.thumbs .swiper-container', {
       direction: 'vertical',
       slidesPerView: 4,
       spaceBetween: 24,
@@ -81,16 +24,16 @@ class ProductScreen implements Screen {
     });
 
     const thumbs = document.querySelectorAll('.thumbs .swiper-slide') as NodeListOf<HTMLDivElement>;
-    const mySwiper: Swiper = new Swiper('.product-page__slider-wrapper .swiper-container', {
+    const productSlider: Swiper = new Swiper('.product-page__slider-wrapper .swiper-container', {
       thumbs: {
-        swiper: thumbSwiper,
+        swiper: thumbsSlider,
       },
       on: {
         slideChange: function (): void {
           thumbs.forEach((el) => {
             el.classList.remove('thumbs-active');
           });
-          const activeIndex: number = mySwiper.activeIndex;
+          const activeIndex: number = productSlider.activeIndex;
           thumbs[activeIndex].classList.add('thumbs-active');
         },
       },
@@ -120,16 +63,104 @@ class ProductScreen implements Screen {
         });
 
         element.classList.add('thumbs-active');
-        let swiperGetData: string | null = element.getAttribute('data-slide');
-        mySwiper.slideTo(Number(swiperGetData), 500);
+        const swiperGetData: string | null = element.getAttribute('data-slide');
+        productSlider.slideTo(Number(swiperGetData), 500);
       });
     });
   }
 
-  public render(): string {
+  checkExistItems(id: number) {
+    const cartItems = getCartItems();
+    return cartItems.find((item) => item.product === id);
+  }
+
+  productInCart(btn: HTMLButtonElement, id: number) {
+    const existItem = this.checkExistItems(id);
+
+    if (existItem) {
+      btn.textContent = 'DROP FROM CART';
+      btn.classList.add('btn_primary_disabled');
+    } else {
+      btn.textContent = 'ADD TO CART';
+      btn.classList.remove('btn_primary_disabled');
+    }
+  }
+
+  addCart(btn: HTMLButtonElement, id: number) {
+    const product = products[id - 1];
+    const existItem = this.checkExistItems(id);
+
+    if (existItem) {
+      btn.textContent = 'ADD TO CART';
+      btn.classList.remove('btn_primary_disabled');
+      homeScreen.removeFromCart(existItem.product);
+    } else {
+      homeScreen.addToCart({
+        product: product.id,
+        title: product.title,
+        image: product.thumbnail,
+        price: product.price,
+        category: product.category,
+        stock: product.stock,
+        qty: 1,
+      });
+
+      btn.textContent = 'DROP FROM CART';
+      btn.classList.add('btn_primary_disabled');
+    }
+  }
+
+  openCart(btn: HTMLElement, id: number) {
+    document.location.hash = `/cart`;
+    const product = products[id - 1];
+    const existItem = this.checkExistItems(id);
+
+    if (!existItem) {
+      homeScreen.addToCart({
+        product: product.id,
+        title: product.title,
+        image: product.thumbnail,
+        price: product.price,
+        category: product.category,
+        stock: product.stock,
+        qty: 1,
+      });
+
+      btn.textContent = 'DROP FROM CART';
+      btn.classList.add('btn_primary_disabled');
+    }
+
+    setTimeout(cartScreen.openModal, 100);
+  }
+
+  afterRender() {
+    const request: Route = parseRequestUrl();
+    const id: number = Number(request.id);
+    const buttonAddCart = document.querySelector('.product-order__add-cart') as HTMLButtonElement;
+    const buttonOneClick = document.querySelector('.product-order__one-click') as HTMLButtonElement;
+
+    // Проверка есть ли данный товар в корзине
+    this.productInCart(buttonAddCart, id);
+
+    // Обработка события кнопки добавление товара в корзину
+    buttonAddCart.addEventListener('click', () => {
+      this.addCart(buttonAddCart, id);
+    });
+
+    // Обработка события кнопки быстрой покупки
+    buttonOneClick.addEventListener('click', () => {
+      this.openCart(buttonAddCart, id);
+    });
+
+    // Создание слайдера
+    this.slider();
+  }
+
+  render() {
     const request: Route = parseRequestUrl();
     const id: number = Number(request.id) - 1;
     rerender(header);
+
     return `
     <div class="page__container container">
         <ul class="breadcrumbs">
