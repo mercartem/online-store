@@ -1,7 +1,19 @@
 .sort {
   &__container {
     display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
     justify-content: space-between;
+    @media screen and (max-width: 870px) {
+      justify-content: center;
+      width: 28rem;
+      margin: 0 auto;
+    }
+    @media screen and (max-width: 650px) {
+      position: relative;
+      padding-top: 4rem;
+      padding-bottom: 2rem;
+    }
   }
 
   &__dropdown {
@@ -9,6 +21,9 @@
     width: 28rem;
     height: 3.2rem;
     font-weight: 400;
+    @media screen and (max-width: 870px) {
+      order: 1;
+    }
 
     &::before {
       content: '';
@@ -80,6 +95,7 @@
     opacity: 0;
     visibility: hidden;
     transition: 0.35s ease;
+    z-index: 1;
   }
 
   &__item {
@@ -131,5 +147,33 @@
         fill: var(--white-color);
       }
     }
+  }
+  @media screen and (max-width: 870px) {
+    position: relative;
+    left: 9.4rem;
+  }
+}
+
+.burger-filter {
+  display: none;
+  position: absolute;
+  left: 0;
+  width: 7rem;
+  height: 2.8rem;
+  padding: 0.2rem;
+  background-color: var(--gray-color-light);
+  border-radius: 4.5rem;
+  box-shadow: 0rem 0.4rem 1.4rem rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  div {
+    width: 100%;
+    height: 100%;
+    background-image: url(../assets/img/filter.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  @media screen and (max-width: 650px) {
+    display: block;
   }
 }

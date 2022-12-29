@@ -118,6 +118,7 @@ class Sort implements Screen {
   render() {
     return `
     <div class="sort__container">
+      <div class="burger-filter"><div></div></div>
       <div class="sort__dropdown font_S">
         <input type="text" class="sort__input" readonly placeholder="Sort">
         <div class="sort__options">

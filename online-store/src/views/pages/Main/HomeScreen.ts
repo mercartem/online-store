@@ -8,8 +8,47 @@ import sort from '../../components/SortBlock/Sort';
 
 class HomeScreen implements Screen {
   products: Product[];
+  isFilterBlock: boolean;
   constructor() {
     this.products = sort.getSortProducts();
+    this.isFilterBlock = false;
+  }
+
+  productInCart(btns: NodeListOf<Element>, i: number) {
+    const cartItems = getCartItems();
+    const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
+    if (existItem) {
+      btns[i].textContent = 'DROP FROM CART';
+      btns[i].classList.add('btn_primary_disabled');
+    } else {
+      btns[i].textContent = 'ADD TO CART';
+      btns[i].classList.remove('btn_primary_disabled');
+    }
+  }
+
+  addAndRemoveCart(btns: NodeListOf<Element>, i: number, e: Event) {
+    const target = e.target as HTMLElement;
+    const id = Number(target.id);
+    const product = this.products[i];
+    const cartItems = getCartItems();
+    const existItem = cartItems.find((x) => x.product === id);
+    if (existItem) {
+      btns[i].textContent = 'ADD TO CART';
+      btns[i].classList.remove('btn_primary_disabled');
+      this.removeFromCart(existItem.product);
+    } else {
+      this.addToCart({
+        product: product.id,
+        title: product.title,
+        image: product.thumbnail,
+        price: product.price,
+        category: product.category,
+        stock: product.stock,
+        qty: 1,
+      });
+      btns[i].textContent = 'DROP FROM CART';
+      btns[i].classList.add('btn_primary_disabled');
+    }
   }
 
   addToCart(item: CartProduct, forceUpdate = false) {
@@ -43,53 +82,43 @@ class HomeScreen implements Screen {
 
     this.products = sort.getSortProducts();
 
-    const btns = document.querySelectorAll('.btn_primary');
+    const btns: NodeListOf<Element> = document.querySelectorAll('.btn_primary');
+    const btnFilter = document.querySelector('.burger-filter') as HTMLElement;
+    const btnClose = document.querySelector('.btn_close') as HTMLElement;
+    const filterBlock = document.querySelector('.filter') as HTMLElement;
+    const catalog = document.querySelector('.catalog') as HTMLElement;
 
     for (let i = 0; i < btns.length; i++) {
-      const cartItems = getCartItems();
-      const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
-      if (existItem) {
-        btns[i].textContent = 'DROP FROM CART';
-        btns[i].classList.add('btn_primary_disabled');
-      } else {
-        btns[i].textContent = 'ADD TO CART';
-        btns[i].classList.remove('btn_primary_disabled');
-      }
+      // Проверка есть ли данный товар в корзине
+      this.productInCart(btns, i);
+      // Обработка событий кнопок добавления в корзину
       btns[i].addEventListener('click', (e) => {
-        const target = e.target as HTMLElement;
-        const id = Number(target.id);
-        const product = this.products[i];
-        const cartItems = getCartItems();
-        const existItem = cartItems.find((x) => x.product === id);
-        if (existItem) {
-          btns[i].textContent = 'ADD TO CART';
-          btns[i].classList.remove('btn_primary_disabled');
-          this.removeFromCart(existItem.product);
-        } else {
-          this.addToCart({
-            product: product.id,
-            title: product.title,
-            image: product.thumbnail,
-            price: product.price,
-            category: product.category,
-            stock: product.stock,
-            qty: 1,
-          });
-          btns[i].textContent = 'DROP FROM CART';
-          btns[i].classList.add('btn_primary_disabled');
-        }
+        this.addAndRemoveCart(btns, i, e);
+      });
+    }
+
+    // Обработка события кнопки вызова модального окна фильтра
+    if (btnFilter) {
+      btnFilter.addEventListener('click', () => {
+        filterBlock.classList.add('filter_active');
+        catalog.classList.add('catalog_active');
+        this.isFilterBlock = true;
+      });
+      btnClose.addEventListener('click', () => {
+        filterBlock.classList.remove('filter_active');
+        catalog.classList.remove('catalog_active');
+        this.isFilterBlock = false;
       });
     }
   }
 
   public render() {
     const products = sort.getSortProducts();
-    console.log(products);
     rerender(header);
     return `
     <div class="page__container main__container container">
-      <div class="filter">${filter.render()}</div>
-      <div class="catalog">
+      <div class="filter ${this.isFilterBlock ? 'filter_active' : ''}">${filter.render()}</div>
+      <div class="catalog ${this.isFilterBlock ? 'catalog_active' : ''}">
         <div class="sort">${sort.render()}</div>
         ${
           products.length < 1
