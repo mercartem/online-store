@@ -66,6 +66,8 @@
       box-shadow: 0rem 0.4rem 1.4rem rgba(0, 0, 0, 0.1);
       outline: none;
       border: none;
+      -webkit-user-modify: read-only;
+      pointer-events: none;
     }
 
     &-active {

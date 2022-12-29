@@ -1,5 +1,5 @@
 import noUiSlider from 'nouislider';
-import '../../../constans/types/nouislider';
+import '../../../constans/types/nouislider.ts';
 import 'nouislider/dist/nouislider.css';
 import { Screen, Product, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
@@ -18,6 +18,7 @@ class Filter implements Screen {
   maxQty: number;
   minQty: number;
   search: string;
+  isFocus: boolean;
   constructor() {
     this.url = parseRequestUrl();
     this.products = products;
@@ -26,6 +27,7 @@ class Filter implements Screen {
     this.filterBrand = this.url.queryParams.brand ? this.url.queryParams.brand.split('-').join(' ').split('+') : [];
     this.filterCategory = this.url.queryParams.category ? this.url.queryParams.category.split('+') : [];
     this.search = this.url.queryParams.search ? this.url.queryParams.search : '';
+    this.isFocus = false;
     this.maxPrice = this.url.queryParams.price
       ? Number(this.url.queryParams.price.split('+')[1])
       : Math.max(...products.map((x) => x.price));
@@ -236,11 +238,15 @@ class Filter implements Screen {
 
     // Обработка события поиска
     search.value = this.search;
-    search.focus();
+    if (this.search.length > 0 || this.isFocus) {
+      search.focus();
+      this.isFocus = false;
+    }
     search.addEventListener('input', () => {
       this.products = search.value.length < this.search.length ? this.filterByBrandAndCategory() : this.applyFilters();
       this.products = this.searchProducts(search.value);
       this.setSliderValue();
+      this.isFocus = this.search.length === 1 ? true : false;
       this.search = search.value;
       document.location.hash = `/?category=${this.filterCategory.join('+')}&brand=${this.filterBrand
         .join('+')
