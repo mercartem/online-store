@@ -17,11 +17,15 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  min-width: 320px;
   background-color: var(--bg-color);
   font-family: var(--font-family);
   font-weight: 400;
   color: var(--black-color);
-  height: 100vh;
 }
 
 ul,
@@ -47,17 +51,18 @@ img {
   margin-top: 8rem;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-areas:
-    'header'
-    'main'
-    'footer';
-  grid-template-columns: 1fr;
-  // Футер прижимается к хэдеру
-  // grid-template-rows: 8rem 1fr 20rem;
-  height: 100%;
-}
+// #app {
+
+//   // display: grid;
+//   // grid-template-areas:
+//   //   'header'
+//   //   'main'
+//   //   'footer';
+//   // grid-template-columns: 1fr;
+//   // Футер прижимается к хэдеру
+//   // grid-template-rows: 8rem 1fr 20rem;
+//   // height: 100%;
+// }
 
 .container {
   width: 100%;
