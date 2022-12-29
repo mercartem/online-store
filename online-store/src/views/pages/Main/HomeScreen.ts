@@ -14,6 +14,43 @@ class HomeScreen implements Screen {
     this.isFilterBlock = false;
   }
 
+  productInCart(btns: NodeListOf<Element>, i: number) {
+    const cartItems = getCartItems();
+    const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
+    if (existItem) {
+      btns[i].textContent = 'DROP FROM CART';
+      btns[i].classList.add('btn_primary_disabled');
+    } else {
+      btns[i].textContent = 'ADD TO CART';
+      btns[i].classList.remove('btn_primary_disabled');
+    }
+  }
+
+  addAndRemoveCart(btns: NodeListOf<Element>, i: number, e: Event) {
+    const target = e.target as HTMLElement;
+    const id = Number(target.id);
+    const product = this.products[i];
+    const cartItems = getCartItems();
+    const existItem = cartItems.find((x) => x.product === id);
+    if (existItem) {
+      btns[i].textContent = 'ADD TO CART';
+      btns[i].classList.remove('btn_primary_disabled');
+      this.removeFromCart(existItem.product);
+    } else {
+      this.addToCart({
+        product: product.id,
+        title: product.title,
+        image: product.thumbnail,
+        price: product.price,
+        category: product.category,
+        stock: product.stock,
+        qty: 1,
+      });
+      btns[i].textContent = 'DROP FROM CART';
+      btns[i].classList.add('btn_primary_disabled');
+    }
+  }
+
   addToCart(item: CartProduct, forceUpdate = false) {
     let cartItems: CartProduct[] = getCartItems();
     const existItem = cartItems.find((x) => x.product === item.product);
@@ -45,46 +82,18 @@ class HomeScreen implements Screen {
 
     this.products = sort.getSortProducts();
 
-    const btns = document.querySelectorAll('.btn_primary');
+    const btns: NodeListOf<Element> = document.querySelectorAll('.btn_primary');
     const btnFilter = document.querySelector('.burger-filter') as HTMLElement;
     const btnClose = document.querySelector('.btn_close') as HTMLElement;
     const filterBlock = document.querySelector('.filter') as HTMLElement;
     const catalog = document.querySelector('.catalog') as HTMLElement;
 
-    // Обработка событий кнопок добавления в корзину
     for (let i = 0; i < btns.length; i++) {
-      const cartItems = getCartItems();
-      const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
-      if (existItem) {
-        btns[i].textContent = 'DROP FROM CART';
-        btns[i].classList.add('btn_primary_disabled');
-      } else {
-        btns[i].textContent = 'ADD TO CART';
-        btns[i].classList.remove('btn_primary_disabled');
-      }
+      // Проверка есть ли данный товар в корзине
+      this.productInCart(btns, i);
+      // Обработка событий кнопок добавления в корзину
       btns[i].addEventListener('click', (e) => {
-        const target = e.target as HTMLElement;
-        const id = Number(target.id);
-        const product = this.products[i];
-        const cartItems = getCartItems();
-        const existItem = cartItems.find((x) => x.product === id);
-        if (existItem) {
-          btns[i].textContent = 'ADD TO CART';
-          btns[i].classList.remove('btn_primary_disabled');
-          this.removeFromCart(existItem.product);
-        } else {
-          this.addToCart({
-            product: product.id,
-            title: product.title,
-            image: product.thumbnail,
-            price: product.price,
-            category: product.category,
-            stock: product.stock,
-            qty: 1,
-          });
-          btns[i].textContent = 'DROP FROM CART';
-          btns[i].classList.add('btn_primary_disabled');
-        }
+        this.addAndRemoveCart(btns, i, e);
       });
     }
 
