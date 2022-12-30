@@ -33,18 +33,18 @@ class Sort implements Screen {
     }&sort=${this.sortProducts}&view=${this.viewProducts}`;
   }
 
-  sort(sortProducts: string): Product[] {
+  sort(sortProducts: string, products = this.products): Product[] {
     switch (sortProducts) {
       case 'priceHigh':
-        return this.products.sort((a, b) => Number(a.price) - Number(b.price));
+        return products.sort((a, b) => Number(a.price) - Number(b.price));
       case 'priceLow':
-        return this.products.sort((a, b) => Number(b.price) - Number(a.price));
+        return products.sort((a, b) => Number(b.price) - Number(a.price));
       case 'nameAZ':
-        return this.products.sort((a, b) => a.title.localeCompare(b.title));
+        return products.sort((a, b) => a.title.localeCompare(b.title));
       case 'nameZA':
-        return this.products.sort((a, b) => b.title.localeCompare(a.title));
+        return products.sort((a, b) => b.title.localeCompare(a.title));
       default:
-        return this.products;
+        return products;
     }
   }
 

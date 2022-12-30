@@ -9,6 +9,7 @@ import sort from '../../components/SortBlock/Sort';
 class HomeScreen implements Screen {
   products: Product[];
   isFilterBlock: boolean;
+
   constructor() {
     this.products = sort.getSortProducts();
     this.isFilterBlock = false;

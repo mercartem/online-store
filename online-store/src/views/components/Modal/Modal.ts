@@ -86,7 +86,7 @@ export class Modal implements Screen {
     return result.join('');
   }
 
-  payCard(cardNumber: string) {
+  payCard(cardNumber: string, activePaymentSystem: HTMLDivElement) {
     let paymentSystemType: string = '';
     const ccCardTypePatterns: PaymentSystem<RegExp> = {
       mir: /^2/,
@@ -100,7 +100,6 @@ export class Modal implements Screen {
       }
     });
 
-    const activePaymentSystem = document.querySelector('.card__logo') as HTMLDivElement;
     Object.keys(ccCardTypePatterns).forEach((key) => {
       activePaymentSystem.classList.remove(`card__${key}`);
     });
@@ -110,7 +109,12 @@ export class Modal implements Screen {
     }
   }
 
-  validateCardNumber(inputCardNumber: HTMLInputElement, inCardNumber: string, section: HTMLDivElement) {
+  validateCardNumber(
+    inputCardNumber: HTMLInputElement,
+    inCardNumber: string,
+    section: HTMLDivElement,
+    activePaymentSystem: HTMLDivElement
+  ) {
     const reCardNumber: RegExp = /^\d{0,16}$/g;
     const separatorCardNumber: string = ' ';
     inCardNumber = inCardNumber.replace(/[^\d]/g, '');
@@ -121,7 +125,7 @@ export class Modal implements Screen {
     }
 
     // Добавление картинки платёжной системы
-    this.payCard(inputCardNumber.value);
+    this.payCard(inputCardNumber.value, activePaymentSystem);
 
     inCardNumber = inCardNumber.replace(/[^\d]/g, '');
     if (/^\d{16}$/g.test(inCardNumber)) {
@@ -174,6 +178,7 @@ export class Modal implements Screen {
 
   afterRender() {
     const section__input = document.querySelectorAll('.form-input') as NodeListOf<HTMLDivElement>;
+    const activePaymentSystem = document.querySelector('.card__logo') as HTMLDivElement;
 
     // Обработка события кнопки (крестик) закрытия модального окна
     const buttonClose = document.querySelector('.modal__btn') as HTMLButtonElement;
@@ -228,7 +233,7 @@ export class Modal implements Screen {
     // Проверка валидации поля "Номер карты"
     const inputCardNumber = document.querySelector('#card-number') as HTMLInputElement;
     inputCardNumber.addEventListener('input', () => {
-      this.validateCardNumber(inputCardNumber, inputCardNumber.value, section__input[4]);
+      this.validateCardNumber(inputCardNumber, inputCardNumber.value, section__input[4], activePaymentSystem);
     });
 
     // Проверка валидации поля "MM / YY"
@@ -249,12 +254,16 @@ export class Modal implements Screen {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
+      for (let i = 0; i < section__input.length; i++) {
+        section__input[i].classList.add('input-error');
+      }
+
       if (
         this.validateName(inputName.value, section__input[0]) &&
         this.validatePhone(inputPhone.value, section__input[1]) &&
         this.validateAddress(inputAddress.value, section__input[2]) &&
         this.validateEmail(inputEmail.value, section__input[3]) &&
-        this.validateCardNumber(inputCardNumber, inputCardNumber.value, section__input[4]) &&
+        this.validateCardNumber(inputCardNumber, inputCardNumber.value, section__input[4], activePaymentSystem) &&
         this.validateCardMonth(inputCardMonth, inputCardMonth.value, section__input[5]) &&
         this.validateCardCVV(inputCardCVV, inputCardCVV.value, section__input[6])
       ) {
@@ -271,10 +280,6 @@ export class Modal implements Screen {
           form.submit();
         }, 3000);
       } else {
-        for (let i = 0; i < section__input.length; i++) {
-          section__input[i].classList.add('input-error');
-        }
-
         return;
       }
     });
