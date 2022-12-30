@@ -6,6 +6,7 @@ import { Swiper } from 'swiper';
 import header from '../../components/Header/header';
 import homeScreen from '../Main/HomeScreen';
 import cartScreen from '../Cart/CartScreen';
+import filter from '../../components/FiltersBlock/Filters';
 
 class ProductScreen implements Screen {
   slider() {
@@ -138,6 +139,12 @@ class ProductScreen implements Screen {
     const id: number = Number(request.id);
     const buttonAddCart = document.querySelector('.product-order__add-cart') as HTMLButtonElement;
     const buttonOneClick = document.querySelector('.product-order__one-click') as HTMLButtonElement;
+    const catalogLink = document.querySelector('.breadcrumbs__link') as HTMLElement;
+
+    // Сброс фильтров при нажатии
+    catalogLink.addEventListener('click', () => {
+      filter.resetFilters();
+    });
 
     // Проверка есть ли данный товар в корзине
     this.productInCart(buttonAddCart, id);
