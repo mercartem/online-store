@@ -5,6 +5,7 @@ import homeScreen from './views/pages/Main/HomeScreen';
 import ProductScreen from './views/pages/Product/ProductScreen';
 import error404Screen from './views/pages/NotFound/Error404Screen';
 import cartScreen from './views/pages/Cart/CartScreen';
+import filter from './views/components/FiltersBlock/Filters';
 
 const productScreen: ProductScreen = new ProductScreen();
 
@@ -30,6 +31,15 @@ const router = (): void => {
   if (screen.afterRender) {
     screen.afterRender();
   }
+
+  const catalogHeader = document.querySelector('.menu-nav__link') as HTMLElement;
+  const catalogFooter = document.querySelector('.menu-footer__link') as HTMLElement;
+  catalogHeader.addEventListener('click', () => {
+    filter.resetFilters();
+  });
+  catalogFooter.addEventListener('click', () => {
+    filter.resetFilters();
+  });
 };
 
 window.addEventListener('load', router);

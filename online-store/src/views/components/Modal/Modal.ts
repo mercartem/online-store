@@ -1,4 +1,5 @@
 import { Screen, PaymentSystem } from '../../../constans/types/interfaces';
+import filter from '../FiltersBlock/Filters';
 
 export class Modal implements Screen {
   closeModal() {
@@ -276,7 +277,9 @@ export class Modal implements Screen {
         localStorage.clear();
 
         setTimeout(() => {
+          filter.resetFilters();
           document.location.hash = `/`;
+          document.body.style.overflow = '';
           form.submit();
         }, 3000);
       } else {

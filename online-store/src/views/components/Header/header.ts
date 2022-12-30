@@ -9,7 +9,7 @@ export class Header implements Screen {
     <div class="header__container container">
     <div class="header__body">
       <div class="header__logo logo">
-        <a href="/#/"> VITART </a>
+        <a> VITART </a>
       </div>
       <div class="header__main">
         <nav class="header__menu menu-nav">
