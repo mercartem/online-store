@@ -302,7 +302,7 @@ const products: Data = [
   },
   {
     id: 21,
-    title: 'T-shirt FC Lokomotiv',
+    title: 'Uniform FC Lokomotiv',
     description:
       'Style, continuity and victory - adidas jersey perfectly combines these three qualities. Made from sweat-wicking Aeroready material with a silky texture, this shirt keeps you dry in all conditions. Choose green and jump into the #НаВсехПарах season! Composition: 100% polyester. Official products of FC Lokomotiv.',
     price: 4190,
