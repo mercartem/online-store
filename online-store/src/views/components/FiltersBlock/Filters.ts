@@ -1,12 +1,10 @@
 import noUiSlider from 'nouislider';
 import '../../../constans/types/nouislider.ts';
-import 'nouislider/dist/nouislider.css';
 import { Screen, Product, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
 import { parseRequestUrl, rerender } from '../../../constans/utils';
-import homeScreen from '../../pages/Main/HomeScreen';
 
-class Filter implements Screen {
+export class Filter implements Screen {
   url: Route;
   products: Product[];
   filterCategory: string[];
@@ -89,8 +87,7 @@ class Filter implements Screen {
     this.maxQty = Math.max(...this.products.map((x) => x.stock));
   }
 
-  searchProducts(search: string): Product[] {
-    const products = this.products;
+  searchProducts(search: string, products = this.products): Product[] {
     const nonInformativeFields = ['id', 'thumbnail', 'images', 'discountPercentage'];
     const result = products.filter((product) => {
       return Object.entries(product)
@@ -260,7 +257,6 @@ class Filter implements Screen {
     btnReset.addEventListener('click', () => {
       this.resetFilters();
       document.location.hash = '/';
-      rerender(homeScreen);
     });
 
     // Обработка события кнопки копирования
