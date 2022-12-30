@@ -51,8 +51,8 @@ export class Filter implements Screen {
     return this.products;
   }
 
-  filterByBrandAndCategory() {
-    const result = products.filter((x) => {
+  filterByBrandAndCategory(productsAll: Product[] = products) {
+    const result = productsAll.filter((x) => {
       if (this.filterBrand.length < 1 && this.filterCategory.length < 1) {
         return true;
       }
@@ -73,8 +73,7 @@ export class Filter implements Screen {
     return result;
   }
 
-  filterByPriceAndStock() {
-    const products = this.products;
+  filterByPriceAndStock(products = this.products) {
     return products.filter(
       (x) => x.price >= this.minPrice && x.price <= this.maxPrice && x.stock >= this.minQty && x.stock <= this.maxQty
     );
