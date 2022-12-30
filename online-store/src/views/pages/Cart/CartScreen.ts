@@ -1,7 +1,7 @@
 import { Screen, Route, CartProduct } from '../../../constans/types/interfaces';
 import { getCartItems } from '../../../constans/localStorage';
 import { parseRequestUrl, rerender } from '../../../constans/utils';
-import header from '../../components/Header/Header';
+import header from '../../components/Header/header';
 import homeScreen from '../Main/HomeScreen';
 import modal from '../../components/Modal/Modal';
 
@@ -31,7 +31,7 @@ class CartScreen implements Screen {
   openModal() {
     const section__input = document.querySelectorAll('.form-input') as NodeListOf<HTMLDivElement>;
     for (let i = 0; i < section__input.length; i++) {
-      section__input[i].classList.remove('error');
+      section__input[i].classList.remove('input-error');
     }
     const modal = document.querySelector('.modal') as HTMLDivElement;
     document.body.style.overflow = 'hidden';

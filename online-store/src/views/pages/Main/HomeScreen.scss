@@ -40,17 +40,7 @@
   justify-items: center;
   grid-auto-flow: row;
   grid-template-columns: 1fr;
-  // max-width: 85.6rem;
   gap: 1.5rem;
-  // min-width: 78rem;
-  // display: flex;
-  // flex-direction: row;
-  // row-gap: 3rem;
-  // column-gap: 1.5rem;
-  // flex-wrap: wrap;
-  // justify-content: center;
-  // max-width: 78rem;
-  // flex-wrap: wrap;
 
   @media screen and (min-width: 850px) {
     grid-template-columns: repeat(2, 1fr);
@@ -62,9 +52,13 @@
     min-width: 78rem;
   }
 
+  &-notfound {
+    grid-template-columns: 1fr;
+    padding: 0 2rem;
+  }
+
   &-list {
     grid-template-columns: 1fr;
-    // flex-direction: column;
 
     .product {
       flex-direction: row;
@@ -116,6 +110,10 @@
   width: 25rem;
   height: 50rem;
   padding: 2rem 1rem;
+
+  &__name {
+    text-align: center;
+  }
 
   &__info {
     display: flex;

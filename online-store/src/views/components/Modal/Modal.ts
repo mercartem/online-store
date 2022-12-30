@@ -28,11 +28,11 @@ export class Modal implements Screen {
     const reName: RegExp = /^\b[A-Za-z]{3,}\b(?: \b[A-Za-z]{3,}\b){1,}$/;
 
     if (reName.test(inName)) {
-      section.classList.remove('error');
+      section.classList.remove('input-error');
       return true;
     }
 
-    section.classList.add('error');
+    section.classList.add('input-error');
     return false;
   }
 
@@ -40,11 +40,11 @@ export class Modal implements Screen {
     const rePhone: RegExp = /^\+\d{9,}$/;
 
     if (rePhone.test(inPhone)) {
-      section.classList.remove('error');
+      section.classList.remove('input-error');
       return true;
     }
 
-    section.classList.add('error');
+    section.classList.add('input-error');
     return false;
   }
 
@@ -52,11 +52,11 @@ export class Modal implements Screen {
     const reAddress: RegExp = /^\b[\w ]{5,}\b(?: \b[\w ]{5,}\b){2,}$/;
 
     if (reAddress.test(inAddress)) {
-      section.classList.remove('error');
+      section.classList.remove('input-error');
       return true;
     }
 
-    section.classList.add('error');
+    section.classList.add('input-error');
     return false;
   }
 
@@ -64,11 +64,11 @@ export class Modal implements Screen {
     const reEmail: RegExp = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
 
     if (reEmail.test(inEmail)) {
-      section.classList.remove('error');
+      section.classList.remove('input-error');
       return true;
     }
 
-    section.classList.add('error');
+    section.classList.add('input-error');
     return false;
   }
 
@@ -125,11 +125,11 @@ export class Modal implements Screen {
 
     inCardNumber = inCardNumber.replace(/[^\d]/g, '');
     if (/^\d{16}$/g.test(inCardNumber)) {
-      section.classList.remove('error');
+      section.classList.remove('input-error');
       return true;
     }
 
-    section.classList.add('error');
+    section.classList.add('input-error');
     return false;
   }
 
@@ -144,17 +144,17 @@ export class Modal implements Screen {
       inputCardMonth.value = inCardMonth;
 
       if (Number(month) > 12 || Number(month) === 0) {
-        section.classList.add('error');
+        section.classList.add('input-error');
         return false;
       }
 
-      section.classList.remove('error');
+      section.classList.remove('input-error');
       return true;
     }
 
     inCardMonth = this.maskCard(inCardMonth, 2, separatorCardMonth);
     inputCardMonth.value = inCardMonth;
-    section.classList.add('error');
+    section.classList.add('input-error');
     return false;
   }
 
@@ -164,11 +164,11 @@ export class Modal implements Screen {
     inputCardCVV.value = inCardCVV;
 
     if (reCardCVV.test(inCardCVV)) {
-      section.classList.remove('error');
+      section.classList.remove('input-error');
       return true;
     }
 
-    section.classList.add('error');
+    section.classList.add('input-error');
     return false;
   }
 
@@ -272,7 +272,7 @@ export class Modal implements Screen {
         }, 3000);
       } else {
         for (let i = 0; i < section__input.length; i++) {
-          section__input[i].classList.add('error');
+          section__input[i].classList.add('input-error');
         }
 
         return;

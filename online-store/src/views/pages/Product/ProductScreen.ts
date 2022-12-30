@@ -3,7 +3,7 @@ import products from '../../../constans/data';
 import { parseRequestUrl, rerender } from '../../../constans/utils';
 import { getCartItems } from '../../../constans/localStorage';
 import { Swiper } from 'swiper';
-import header from '../../components/Header/Header';
+import header from '../../components/Header/header';
 import homeScreen from '../Main/HomeScreen';
 import cartScreen from '../Cart/CartScreen';
 
@@ -165,7 +165,7 @@ class ProductScreen implements Screen {
     <div class="page__container container">
     ${
       products.length <= id
-        ? `<div class="font_XXL">Product ${id + 1} not found</div>`
+        ? `<div class="font_XXL error">Product ${id + 1} not found</div>`
         : `<ul class="breadcrumbs">
           <li class="breadcrumbs__item">
             <a href="/#/" class="font_M breadcrumbs__link">Catalog</a>
