@@ -15,7 +15,7 @@ class HomeScreen implements Screen {
     this.isFilterBlock = false;
   }
 
-  productInCart(btns: NodeListOf<Element>, i: number) {
+  productInCart(btns: NodeListOf<Element> | HTMLCollection, i: number) {
     const cartItems = getCartItems();
     const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
     if (existItem) {

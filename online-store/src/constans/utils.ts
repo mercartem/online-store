@@ -30,13 +30,11 @@ export const rerender = (component: Screen): void => {
   const main = document.querySelector('.page') as HTMLElement;
   const header = document.querySelector('.header') as HTMLElement;
 
-  window.onload = function () {
-    if (component instanceof Header) {
-      header.innerHTML = component.render();
-    } else {
-      main.innerHTML = component.render();
-    }
-  };
+  if (component instanceof Header) {
+    header.innerHTML = component.render();
+  } else {
+    main.innerHTML = component.render();
+  }
 
   if (component.afterRender) {
     component.afterRender();
