@@ -1,10 +1,12 @@
 import { Screen } from '../../../constans/types/interfaces';
+import filter from '../../components/FiltersBlock/Filters';
 
 class Error404Screen implements Screen {
   afterRender() {
     // Переход в каталог при клике на кнопку
     const buttonError = document.querySelector('.error__btn') as HTMLButtonElement;
     buttonError.addEventListener('click', () => {
+      filter.resetFilters();
       document.location.hash = `/`;
     });
   }

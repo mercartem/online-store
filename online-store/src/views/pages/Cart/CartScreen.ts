@@ -4,6 +4,7 @@ import { parseRequestUrl, rerender } from '../../../constans/utils';
 import header from '../../components/Header/header';
 import homeScreen from '../Main/HomeScreen';
 import modal from '../../components/Modal/Modal';
+import filter from '../../components/FiltersBlock/Filters';
 
 class CartScreen implements Screen {
   limit: number;
@@ -104,6 +105,7 @@ class CartScreen implements Screen {
     // Проверяем наличие элемента
     if (buttonEmpty) {
       buttonEmpty.addEventListener('click', () => {
+        filter.resetFilters();
         document.location.hash = `/`;
       });
     } else {
