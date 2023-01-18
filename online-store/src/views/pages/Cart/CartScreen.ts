@@ -17,13 +17,9 @@ class CartScreen implements Screen {
   constructor() {
     this.url = parseRequestUrl();
     this.limit =
-      Number(this.url.queryParams.limit) < getCartItems().length
-        ? Number(this.url.queryParams.limit)
-        : getCartItems().length;
+      +this.url.queryParams.limit < getCartItems().length ? +this.url.queryParams.limit : getCartItems().length;
     this.page =
-      Number(this.url.queryParams.page) <= Math.ceil(getCartItems().length / this.limit)
-        ? Number(this.url.queryParams.page)
-        : 1;
+      +this.url.queryParams.page <= Math.ceil(getCartItems().length / this.limit) ? +this.url.queryParams.page : 1;
     this.promo = 0;
     this.codes = [];
     this.appliedPromo = [];
@@ -66,8 +62,7 @@ class CartScreen implements Screen {
 
   itemQty(e: Event) {
     const items = getCartItems();
-    const target = e.target as HTMLElement;
-    const id = Number(target.id);
+    const id = +(e.target as HTMLElement).id;
     return items.find((x) => x.product === id) as CartProduct;
   }
 

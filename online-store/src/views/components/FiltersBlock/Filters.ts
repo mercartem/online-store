@@ -27,17 +27,17 @@ export class Filter implements Screen {
     this.search = this.url.queryParams.search ? this.url.queryParams.search : '';
     this.isFocus = false;
     this.maxPrice = this.url.queryParams.price
-      ? Number(this.url.queryParams.price.split('+')[1])
-      : Math.max(...products.map((x) => x.price));
+      ? +this.url.queryParams.price.split('+')[1]
+      : Math.max(...products.map((product) => product.price));
     this.minPrice = this.url.queryParams.price
-      ? Number(this.url.queryParams.price.split('+')[0])
-      : Math.min(...products.map((x) => x.price));
+      ? +this.url.queryParams.price.split('+')[0]
+      : Math.min(...products.map((product) => product.price));
     this.maxQty = this.url.queryParams.qty
-      ? Number(this.url.queryParams.qty.split('+')[1])
-      : Math.max(...products.map((x) => x.stock));
+      ? +this.url.queryParams.qty.split('+')[1]
+      : Math.max(...products.map((product) => product.stock));
     this.minQty = this.url.queryParams.qty
-      ? Number(this.url.queryParams.qty.split('+')[0])
-      : Math.min(...products.map((x) => x.stock));
+      ? +this.url.queryParams.qty.split('+')[0]
+      : Math.min(...products.map((product) => product.stock));
   }
 
   getFilterProducts() {
@@ -52,18 +52,18 @@ export class Filter implements Screen {
   }
 
   filterByBrandAndCategory(productsAll: Product[] = products) {
-    const result = productsAll.filter((x) => {
+    const result = productsAll.filter((product) => {
       if (this.filterBrand.length < 1 && this.filterCategory.length < 1) {
         return true;
       }
       if (this.filterBrand.length > 0 && this.filterCategory.length > 0) {
-        if (this.filterBrand.includes(x.brand) && this.filterCategory.includes(x.category)) {
+        if (this.filterBrand.includes(product.brand) && this.filterCategory.includes(product.category)) {
           return true;
         } else {
           return false;
         }
       } else {
-        if (this.filterBrand.includes(x.brand) || this.filterCategory.includes(x.category)) {
+        if (this.filterBrand.includes(product.brand) || this.filterCategory.includes(product.category)) {
           return true;
         } else {
           return false;
@@ -75,15 +75,19 @@ export class Filter implements Screen {
 
   filterByPriceAndStock(products = this.products) {
     return products.filter(
-      (x) => x.price >= this.minPrice && x.price <= this.maxPrice && x.stock >= this.minQty && x.stock <= this.maxQty
+      (product) =>
+        product.price >= this.minPrice &&
+        product.price <= this.maxPrice &&
+        product.stock >= this.minQty &&
+        product.stock <= this.maxQty
     );
   }
 
   setSliderValue() {
-    this.minPrice = Math.min(...this.products.map((x) => x.price));
-    this.maxPrice = Math.max(...this.products.map((x) => x.price));
-    this.minQty = Math.min(...this.products.map((x) => x.stock));
-    this.maxQty = Math.max(...this.products.map((x) => x.stock));
+    this.minPrice = Math.min(...this.products.map((product) => product.price));
+    this.maxPrice = Math.max(...this.products.map((product) => product.price));
+    this.minQty = Math.min(...this.products.map((product) => product.stock));
+    this.maxQty = Math.max(...this.products.map((product) => product.stock));
   }
 
   searchProducts(search: string, products = this.products): Product[] {
@@ -100,21 +104,20 @@ export class Filter implements Screen {
     this.filterCategory = [];
     this.filterBrand = [];
     this.search = '';
-    this.minPrice = Math.min(...products.map((x) => x.price));
-    this.maxPrice = Math.max(...products.map((x) => x.price));
-    this.minQty = Math.min(...products.map((x) => x.stock));
-    this.maxQty = Math.max(...products.map((x) => x.stock));
+    this.minPrice = Math.min(...products.map((product) => product.price));
+    this.maxPrice = Math.max(...products.map((product) => product.price));
+    this.minQty = Math.min(...products.map((product) => product.stock));
+    this.maxQty = Math.max(...products.map((product) => product.stock));
     this.products = products;
   }
 
-  copyUrl() {
+  CopyUrlWithFilters() {
     const url = window.location.href;
-    const tempInput = document.createElement('input');
-    tempInput.value = url;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
+    const copyText = document.createElement('input');
+    copyText.value = url;
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);;
   }
 
   getQueryParamsFromSort() {
@@ -154,8 +157,8 @@ export class Filter implements Screen {
             : this.filterCategory.push(checkbox[i].name);
         } else {
           i < checkbox.length / 2
-            ? (this.filterBrand = this.filterBrand.filter((x) => x !== checkbox[i].name))
-            : (this.filterCategory = this.filterCategory.filter((x) => x !== checkbox[i].name));
+            ? (this.filterBrand = this.filterBrand.filter((product) => product !== checkbox[i].name))
+            : (this.filterCategory = this.filterCategory.filter((product) => product !== checkbox[i].name));
         }
         this.products =
           this.filterBrand.length < 1 || this.filterCategory.length < 1
@@ -174,7 +177,7 @@ export class Filter implements Screen {
     // Форматирования числа для noUiSlider
     const formatForSlider = {
       from: function (formattedValue: string) {
-        return Number(formattedValue);
+        return +formattedValue;
       },
       to: function (numericValue: number) {
         return Math.round(numericValue);
@@ -187,18 +190,19 @@ export class Filter implements Screen {
       step: 1,
       connect: true,
       range: {
-        min: Math.min(...products.map((x) => x.price)),
-        max: Math.max(...products.map((x) => x.price)),
+        min: Math.min(...products.map((product) => product.price)),
+        max: Math.max(...products.map((product) => product.price)),
       },
       format: formatForSlider,
     });
+
     noUiSlider.create(qty, {
       start: [this.minQty, this.maxQty],
       step: 1,
       connect: true,
       range: {
-        min: Math.min(...products.map((x) => x.stock)),
-        max: Math.max(...products.map((x) => x.stock)),
+        min: Math.min(...products.map((product) => product.stock)),
+        max: Math.max(...products.map((product) => product.stock)),
       },
       format: formatForSlider,
     });
@@ -207,8 +211,9 @@ export class Filter implements Screen {
     price.noUiSlider.on('update', function (values: string[], handle: number): void {
       priceValues[handle].innerHTML = values[handle];
     });
+
     price.noUiSlider.on('end', function (values: string[]): void {
-      [filter.minPrice, filter.maxPrice] = [Number(values[0]), Number(values[1])];
+      [filter.minPrice, filter.maxPrice] = [+values[0], +values[1]];
       filter.products = filter.applyFilters();
       document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
         .join('+')
@@ -221,8 +226,9 @@ export class Filter implements Screen {
     qty.noUiSlider.on('update', function (values: string[], handle: number): void {
       qtyValues[handle].innerHTML = values[handle];
     });
+    
     qty.noUiSlider.on('end', function (values: string[]): void {
-      [filter.minQty, filter.maxQty] = [Number(values[0]), Number(values[1])];
+      [filter.minQty, filter.maxQty] = [+values[0], +values[1]];
       filter.products = filter.applyFilters();
       document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
         .join('+')
@@ -260,7 +266,7 @@ export class Filter implements Screen {
 
     // Обработка события кнопки копирования
     btnCopy.addEventListener('click', () => {
-      this.copyUrl();
+      this.CopyUrlWithFilters();
       btnCopy.innerHTML = 'COPIED!';
       btnCopy.classList.add('btn_disabled');
     });
