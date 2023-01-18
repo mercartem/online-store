@@ -2,13 +2,13 @@ import noUiSlider from 'nouislider';
 import '../../../constans/types/nouislider.ts';
 import { Screen, Product, Route } from '../../../constans/types/interfaces';
 import products from '../../../constans/data';
-import { parseRequestUrl, rerender } from '../../../constans/utils';
+import { parseRequestUrl } from '../../../constans/utils';
 
 export class Filter implements Screen {
   url: Route;
   products: Product[];
-  filterCategory: string[];
-  filterBrand: string[];
+  filterCategorys: string[];
+  filterBrands: string[];
   sortProducts: string;
   viewProducts: string;
   maxPrice: number;
@@ -22,8 +22,8 @@ export class Filter implements Screen {
     this.products = products;
     this.sortProducts = this.url.queryParams.sort ? this.url.queryParams.sort : '';
     this.viewProducts = this.url.queryParams.view ? this.url.queryParams.view : 'block';
-    this.filterBrand = this.url.queryParams.brand ? this.url.queryParams.brand.split('-').join(' ').split('+') : [];
-    this.filterCategory = this.url.queryParams.category ? this.url.queryParams.category.split('+') : [];
+    this.filterBrands = this.url.queryParams.brand ? this.url.queryParams.brand.split('-').join(' ').split('+') : [];
+    this.filterCategorys = this.url.queryParams.category ? this.url.queryParams.category.split('+') : [];
     this.search = this.url.queryParams.search ? this.url.queryParams.search : '';
     this.isFocus = false;
     this.maxPrice = this.url.queryParams.price
@@ -53,21 +53,13 @@ export class Filter implements Screen {
 
   filterByBrandAndCategory(productsAll: Product[] = products) {
     const result = productsAll.filter((x) => {
-      if (this.filterBrand.length < 1 && this.filterCategory.length < 1) {
+      if (this.filterBrands.length < 1 && this.filterCategorys.length < 1) {
         return true;
       }
-      if (this.filterBrand.length > 0 && this.filterCategory.length > 0) {
-        if (this.filterBrand.includes(x.brand) && this.filterCategory.includes(x.category)) {
-          return true;
-        } else {
-          return false;
-        }
+      if (this.filterBrands.length > 0 && this.filterCategorys.length > 0) {
+        return this.filterBrands.includes(x.brand) && this.filterCategorys.includes(x.category);
       } else {
-        if (this.filterBrand.includes(x.brand) || this.filterCategory.includes(x.category)) {
-          return true;
-        } else {
-          return false;
-        }
+        return this.filterBrands.includes(x.brand) || this.filterCategorys.includes(x.category);
       }
     });
     return result;
@@ -97,8 +89,8 @@ export class Filter implements Screen {
   }
 
   resetFilters() {
-    this.filterCategory = [];
-    this.filterBrand = [];
+    this.filterCategorys = [];
+    this.filterBrands = [];
     this.search = '';
     this.minPrice = Math.min(...products.map((x) => x.price));
     this.maxPrice = Math.max(...products.map((x) => x.price));
@@ -144,25 +136,25 @@ export class Filter implements Screen {
 
     // Обработка событий чекбокса с категориями и брэндами
     for (let i = 0; i < checkbox.length; i++) {
-      if (this.filterBrand.includes(checkbox[i].name) || this.filterCategory.includes(checkbox[i].name)) {
+      if (this.filterBrands.includes(checkbox[i].name) || this.filterCategorys.includes(checkbox[i].name)) {
         checkbox[i].checked = true;
       }
       checkbox[i].addEventListener('change', (e) => {
         if (checkbox[i].checked) {
           i < checkbox.length / 2
-            ? this.filterBrand.push(checkbox[i].name)
-            : this.filterCategory.push(checkbox[i].name);
+            ? this.filterBrands.push(checkbox[i].name)
+            : this.filterCategorys.push(checkbox[i].name);
         } else {
           i < checkbox.length / 2
-            ? (this.filterBrand = this.filterBrand.filter((x) => x !== checkbox[i].name))
-            : (this.filterCategory = this.filterCategory.filter((x) => x !== checkbox[i].name));
+            ? (this.filterBrands = this.filterBrands.filter((x) => x !== checkbox[i].name))
+            : (this.filterCategorys = this.filterCategorys.filter((x) => x !== checkbox[i].name));
         }
         this.products =
-          this.filterBrand.length < 1 || this.filterCategory.length < 1
+          this.filterBrands.length < 1 || this.filterCategorys.length < 1
             ? this.filterByBrandAndCategory()
             : this.filterByPriceAndStock();
         this.setSliderValue();
-        document.location.hash = `/?category=${this.filterCategory.join('+')}&brand=${this.filterBrand
+        document.location.hash = `/?category=${this.filterCategorys.join('+')}&brand=${this.filterBrands
           .join('+')
           .split(' ')
           .join('-')}&price=${this.minPrice}+${this.maxPrice}&qty=${this.minQty}+${this.maxQty}&search=${
@@ -210,7 +202,7 @@ export class Filter implements Screen {
     price.noUiSlider.on('end', function (values: string[]): void {
       [filter.minPrice, filter.maxPrice] = [Number(values[0]), Number(values[1])];
       filter.products = filter.applyFilters();
-      document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+      document.location.hash = `/?category=${filter.filterCategorys.join('+')}&brand=${filter.filterBrands
         .join('+')
         .split(' ')
         .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
@@ -224,7 +216,7 @@ export class Filter implements Screen {
     qty.noUiSlider.on('end', function (values: string[]): void {
       [filter.minQty, filter.maxQty] = [Number(values[0]), Number(values[1])];
       filter.products = filter.applyFilters();
-      document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+      document.location.hash = `/?category=${filter.filterCategorys.join('+')}&brand=${filter.filterBrands
         .join('+')
         .split(' ')
         .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
@@ -244,7 +236,7 @@ export class Filter implements Screen {
       this.setSliderValue();
       this.isFocus = this.search.length === 1 ? true : false;
       this.search = search.value;
-      document.location.hash = `/?category=${this.filterCategory.join('+')}&brand=${this.filterBrand
+      document.location.hash = `/?category=${this.filterCategorys.join('+')}&brand=${this.filterBrands
         .join('+')
         .split(' ')
         .join('-')}&price=${this.minPrice}+${this.maxPrice}&qty=${this.minQty}+${this.maxQty}&search=${
@@ -261,7 +253,7 @@ export class Filter implements Screen {
     // Обработка события кнопки копирования
     btnCopy.addEventListener('click', () => {
       this.copyUrl();
-      btnCopy.innerHTML = 'COPIED!';
+      btnCopy.textContent = 'COPIED!';
       btnCopy.classList.add('btn_disabled');
     });
   }

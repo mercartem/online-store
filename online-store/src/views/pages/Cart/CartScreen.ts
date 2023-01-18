@@ -1,7 +1,7 @@
 import { Screen, Route, CartProduct } from '../../../constans/types/interfaces';
 import { getCartItems } from '../../../constans/localStorage';
 import { parseRequestUrl, rerender } from '../../../constans/utils';
-import header from '../../components/Header/header';
+import header from '../../components/Header/Header';
 import homeScreen from '../Main/HomeScreen';
 import modal from '../../components/Modal/Modal';
 import filter from '../../components/FiltersBlock/Filters';
@@ -49,15 +49,16 @@ class CartScreen implements Screen {
   }
 
   applyPromo(i: number) {
+    const PROMO = 10;
     if (this.appliedPromo.includes(this.codes[i])) {
       const index = this.appliedPromo.indexOf(this.codes[i]);
       if (index !== -1) {
         this.appliedPromo.splice(index, 1);
       }
 
-      this.promo += -10;
+      this.promo += -PROMO;
     } else {
-      this.promo += 10;
+      this.promo += PROMO;
       this.appliedPromo.push(this.codes[i]);
     }
 

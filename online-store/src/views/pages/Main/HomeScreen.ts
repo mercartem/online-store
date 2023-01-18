@@ -2,7 +2,7 @@ import { rerender } from '../../../constans/utils';
 import { CartProduct, Screen, Product } from '../../../constans/types/interfaces';
 import { getCartItems, setCartItems } from '../../../constans/localStorage';
 import cartScreen from '../Cart/CartScreen';
-import header from '../../components/Header/header';
+import header from '../../components/Header/Header';
 import filter from '../../components/FiltersBlock/Filters';
 import sort from '../../components/SortBlock/Sort';
 
