@@ -149,8 +149,8 @@ export class Filter implements Screen {
             : this.filterCategorys.push(checkbox[i].name);
         } else {
           i < checkbox.length / 2
-            ? (this.filterBrand = this.filterBrand.filter((product) => product !== checkbox[i].name))
-            : (this.filterCategory = this.filterCategory.filter((product) => product !== checkbox[i].name));
+            ? (this.filterBrands = this.filterBrands.filter((product) => product !== checkbox[i].name))
+            : (this.filterCategorys = this.filterCategorys.filter((product) => product !== checkbox[i].name));
         }
         this.products =
           this.filterBrands.length < 1 || this.filterCategorys.length < 1
