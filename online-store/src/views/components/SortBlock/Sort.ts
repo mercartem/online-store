@@ -25,7 +25,7 @@ class Sort implements Screen {
     inputSort.value = item.innerHTML;
     this.sort(item.id);
     this.sortProducts = item.id;
-    document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+    document.location.hash = `/?category=${filter.filterCategorys.join('+')}&brand=${filter.filterBrands
       .join('+')
       .split(' ')
       .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
@@ -50,7 +50,7 @@ class Sort implements Screen {
 
   selectView(item: HTMLButtonElement) {
     this.viewProducts = item.id;
-    document.location.hash = `/?category=${filter.filterCategory.join('+')}&brand=${filter.filterBrand
+    document.location.hash = `/?category=${filter.filterCategorys.join('+')}&brand=${filter.filterBrands
       .join('+')
       .split(' ')
       .join('-')}&price=${filter.minPrice}+${filter.maxPrice}&qty=${filter.minQty}+${filter.maxQty}&search=${
