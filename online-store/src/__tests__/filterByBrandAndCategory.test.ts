@@ -53,8 +53,8 @@ test('filters products by brand and category', () => {
     },
   ];
 
-  filter.filterBrand = ['FC Dynamo'];
-  filter.filterCategory = ['balls'];
+  filter.filterBrands = ['FC Dynamo'];
+  filter.filterCategorys = ['balls'];
 
   const expectedResult = [
     {
