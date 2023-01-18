@@ -17,47 +17,44 @@ class HomeScreen implements Screen {
 
   productInCart(btns: NodeListOf<Element> | HTMLCollection, i: number) {
     const cartItems = getCartItems();
-    const existItem = cartItems.find((x) => x.product === Number(btns[i].id));
+    const existItem = cartItems.find(({ product }) => product === +btns[i].id);
+    btns[i].textContent = existItem ? 'DROP FROM CART' : 'ADD TO CART';
     if (existItem) {
-      btns[i].textContent = 'DROP FROM CART';
       btns[i].classList.add('btn_primary_disabled');
     } else {
-      btns[i].textContent = 'ADD TO CART';
       btns[i].classList.remove('btn_primary_disabled');
     }
   }
 
   addAndRemoveCart(btns: NodeListOf<Element>, i: number, e: Event) {
-    const target = e.target as HTMLElement;
-    const id = Number(target.id);
-    const product = this.products[i];
+    const id = +(e.target as HTMLElement).id;
+    const { id: product, title, thumbnail: image, price, category, stock } = this.products[i];
     const cartItems = getCartItems();
-    const existItem = cartItems.find((x) => x.product === id);
+    const existItem = cartItems.find(({ product }) => product === id);
+    btns[i].textContent = existItem ? 'ADD TO CART' : 'DROP FROM CART';
     if (existItem) {
-      btns[i].textContent = 'ADD TO CART';
       btns[i].classList.remove('btn_primary_disabled');
       this.removeFromCart(existItem.product);
     } else {
       this.addToCart({
-        product: product.id,
-        title: product.title,
-        image: product.thumbnail,
-        price: product.price,
-        category: product.category,
-        stock: product.stock,
+        product,
+        title,
+        image,
+        price,
+        category,
+        stock,
         qty: 1,
       });
-      btns[i].textContent = 'DROP FROM CART';
       btns[i].classList.add('btn_primary_disabled');
     }
   }
 
   addToCart(item: CartProduct, forceUpdate = false) {
     let cartItems: CartProduct[] = getCartItems();
-    const existItem = cartItems.find((x) => x.product === item.product);
+    const existItem = cartItems.find(({ product }) => product === item.product);
     if (existItem) {
       if (forceUpdate) {
-        cartItems = cartItems.map((x) => (x.product === existItem.product ? item : x));
+        cartItems = cartItems.map((products) => (products.product === existItem.product ? item : products));
       }
     } else {
       cartItems = [...cartItems, item];
@@ -73,7 +70,7 @@ class HomeScreen implements Screen {
   }
 
   removeFromCart(id: number) {
-    setCartItems(getCartItems().filter((x) => x.product !== id));
+    setCartItems(getCartItems().filter(({ product }) => product !== id));
     rerender(header);
   }
 
@@ -128,21 +125,21 @@ class HomeScreen implements Screen {
         <ul class="products ${sort.viewProducts === 'list' ? 'products-list' : ''}">
           ${products
             .map(
-              (product) => `
+              ({ id, thumbnail, title, stock, price }) => `
           <li>
             <div class="product">
-              <a href="/#/product/${product.id}">
-                <img src="${product.thumbnail}" alt="${product.title}" />
+              <a href="/#/product/${id}">
+                <img src="${thumbnail}" alt="${title}" />
               </a>
               <div class="product__info">
                 <h5 class="product__name font_S">
-                  <a href="/#/product/${product.id}">${product.title}</a>
+                  <a href="/#/product/${id}">${title}</a>
                 </h5>
-                <div class="product__stock font_XXS font_gray">In stock: ${product.stock}</div>
+                <div class="product__stock font_XXS font_gray">In stock: ${stock}</div>
               </div>
               <div class="product__buy">
-                <h4 class="product__price font_M">${product.price} ₽</h4>
-                <button class="product__btn btn btn_M btn_primary" id="${product.id}">ADD TO CART</button>
+                <h4 class="product__price font_M">${price} ₽</h4>
+                <button class="product__btn btn btn_M btn_primary" id="${id}">ADD TO CART</button>
               </div>
             </div>
           </li>

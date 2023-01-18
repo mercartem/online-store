@@ -23,7 +23,7 @@ const router = (): void => {
     (request.resource ? `${request.resource}` : '/') +
     (request.id ? '/:id' : '') +
     (request.verb ? `/${request.verb}` : '');
-  const screen: Screen = routes[parseUrl] ? routes[parseUrl] : error404Screen;
+  const screen: Screen = routes[parseUrl] ?? error404Screen;
   const main = document.querySelector('.page') as HTMLElement;
 
   main.innerHTML = screen.render();
