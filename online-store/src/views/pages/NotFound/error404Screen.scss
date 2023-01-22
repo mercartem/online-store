@@ -1,0 +1,15 @@
+.error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+}
+
+.error__info {
+  padding: 5rem 0;
+}
+
+.error__text {
+  margin-bottom: 5rem;
+}

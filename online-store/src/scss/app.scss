@@ -1,0 +1,241 @@
+@import 'fonts';
+@import 'variables';
+@import 'libs/normalize';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  scroll-behavior: smooth;
+}
+
+html {
+  font-size: 62.5%; /* 16px * 62.5 = 10px = 1rem */
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  min-width: 320px;
+  background-color: var(--bg-color);
+  font-family: var(--font-family);
+  font-weight: 400;
+  color: var(--black-color);
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  pointer-events: none;
+}
+
+.page {
+  margin-top: 8rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 3rem;
+
+  @media screen and (max-width: 991px) {
+    padding: 0 2rem;
+  }
+}
+
+.page__container {
+  padding: 5rem 0;
+}
+
+.font_XXL {
+  font-weight: 700;
+  font-size: 4.8rem;
+  line-height: 5.6rem;
+
+  @media screen and (max-width: 991px) {
+    font-size: 3.6rem;
+    line-height: 4.4rem;
+  }
+}
+
+.font_XL {
+  font-weight: 600;
+  font-size: 3.6rem;
+  line-height: 4.4rem;
+
+  @media screen and (max-width: 991px) {
+    font-size: 1.9rem;
+    line-height: 2.5rem;
+  }
+}
+
+.font_L {
+  font-weight: 700;
+  font-size: 2.8rem;
+  line-height: 3.6rem;
+
+  @media screen and (max-width: 991px) {
+    font-size: 2rem;
+    line-height: 2.6rem;
+  }
+}
+
+.font_M {
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 2.6rem;
+
+  @media screen and (max-width: 991px) {
+    font-size: 1.7rem;
+    line-height: 2.4rem;
+  }
+}
+
+.font_S {
+  font-weight: 700;
+  font-size: 1.7rem;
+  line-height: 2.4rem;
+  @media screen and (max-width: 991px) {
+    font-size: 1.5rem;
+    line-height: 2.2rem;
+  }
+}
+
+.font_XS {
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+
+  @media screen and (max-width: 991px) {
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+  }
+}
+
+.font_XXS {
+  font-size: 1.3rem;
+  line-height: 1.8rem;
+}
+
+.font_white {
+  color: var(--white-color);
+}
+
+.font_black {
+  color: var(--black-color);
+}
+
+.font_gray {
+  color: var(--gray-color);
+}
+
+.font_red {
+  color: var(--red-color);
+}
+
+.btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background-color: transparent;
+  text-transform: uppercase;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+.btn_L {
+  height: 5.6rem;
+  padding: 0 3.2rem;
+  font-size: 1.7rem;
+  line-height: 2.4rem;
+
+  @media screen and (max-width: 991px) {
+    height: 4rem;
+    padding: 0 1.6rem;
+    font-size: 1.5rem;
+    line-height: 2.2rem;
+  }
+}
+
+.btn_M {
+  height: 4rem;
+  padding: 0 1.6rem;
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+
+  @media screen and (max-width: 991px) {
+    height: 3.6rem;
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+  }
+}
+
+.btn_primary {
+  color: var(--white-color);
+  background-color: var(--red-color);
+
+  &:hover {
+    background-color: var(--red-color-light);
+  }
+
+  &:disabled {
+    cursor: default;
+    pointer-events: none;
+    background-color: var(--gray-color);
+  }
+}
+
+.btn_primary_disabled {
+  background-color: var(--gray-color);
+
+  &:hover {
+    background-color: var(--gray-color);
+  }
+}
+
+.btn_outline {
+  color: var(--red-color);
+  border: 0.1rem solid var(--red-color);
+
+  &:hover {
+    color: var(--black-color);
+    border-color: var(--black-color);
+  }
+
+  &:disabled {
+    cursor: default;
+    pointer-events: none;
+    color: var(--gray-color);
+    border: 0.1rem solid var(--gray-color);
+  }
+}
+
+@import '../views/components/Header/Header.scss';
+@import '../views/components/Footer/Footer.scss';
+@import '../views/pages/Main/HomeScreen.scss';
+@import '../views/components/FiltersBlock/Filters.scss';
+@import '../views/components/SortBlock/Sort.scss';
+@import '../views/pages/Product/ProductScreen.scss';
+@import '../views/pages/NotFound/Error404Screen.scss';
+@import '../views/pages/Cart/СartScreen.scss';
+@import '../views/components/Modal/Modal.scss';

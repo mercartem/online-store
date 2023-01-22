@@ -1,0 +1,256 @@
+.shopping__container {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 5rem 2rem;
+}
+
+.cart {
+  margin-bottom: 3rem;
+  width: 60rem;
+}
+
+.cart__page,
+.cart__info {
+  height: 4.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.2rem solid var(--line-color);
+  border-top: 0.2rem solid var(--line-color);
+}
+
+.cart__info {
+  border-top: 0;
+}
+
+.cart__pgn,
+.cart__qty {
+  width: 15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.left-arrow {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.5rem;
+  background: url(../assets/svg/left-arrow.svg) center;
+  cursor: pointer;
+}
+
+.right-arrow {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.5rem;
+  background: url(../assets/svg/right-arrow.svg);
+  cursor: pointer;
+}
+
+.cart__items {
+  position: relative;
+}
+
+.select {
+  position: absolute;
+  top: 0;
+}
+
+.cart__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 0.2rem solid var(--line-color);
+}
+
+.cart__product {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  img {
+    width: 12rem;
+    height: 14rem;
+    object-fit: contain;
+    margin: 0 1.5rem;
+  }
+}
+
+.cart__total {
+  text-align: center;
+}
+.cart__info-product,
+.cart__info-price,
+.cart__info-qty,
+.cart__info-total,
+.cart__items,
+.cart__qty,
+.cart__pgn,
+.about__title {
+  font-weight: 600;
+}
+.cart__info-product {
+  flex: 2;
+}
+
+.cart__info-price,
+.cart__price,
+.cart__info-qty,
+.cart__qty,
+.cart__info-total,
+.cart__total {
+  flex: 1;
+  text-align: center;
+}
+
+.cart__info-total {
+  text-align: right;
+}
+
+.minus {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: url(../assets/svg/minus.svg) center;
+  cursor: pointer;
+}
+
+.plus {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: url(../assets/svg/plus.svg) center;
+  cursor: pointer;
+}
+
+.order {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  border-radius: 1rem;
+  background-color: var(--gray-color-light);
+}
+
+.order__title,
+.order__items,
+.order__sum,
+.order__promo {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 0.1rem solid var(--gray-color);
+  padding-bottom: 2.5rem;
+}
+
+.order__items,
+.order__sum,
+.order__promo {
+  padding: 2.5rem 0;
+}
+
+.order__sum {
+  height: 12rem;
+  align-items: center;
+  text-align: right;
+}
+
+.order__title {
+  justify-content: center;
+}
+
+.order__promo {
+  display: flex;
+  border-bottom: 0;
+  padding-bottom: 1.5rem;
+}
+
+.order__input {
+  width: 60%;
+  box-shadow: 0 0.4rem 1.4rem rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  outline: none;
+}
+
+.sum__active {
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+.order__codes {
+  align-self: flex-start;
+  margin-bottom: 2rem;
+  p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  button {
+    margin-right: 1rem;
+  }
+}
+
+.add {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: url(../assets/svg/add.svg) center;
+  cursor: pointer;
+}
+
+.remove {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: url(../assets/svg/minus.svg) center;
+  cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+  .shopping__container {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cart {
+    width: 100%;
+  }
+  .cart__product {
+    width: 5rem;
+    flex-wrap: wrap;
+  }
+  .cart__about {
+    width: 7.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .order {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .cart__product {
+    img {
+      width: 5rem;
+      height: 7rem;
+      margin: 0;
+      margin-left: 1.5rem;
+    }
+  }
+
+  .cart__price {
+    text-align: left;
+  }
+
+  .cart__qty,
+  .cart__item {
+    gap: 0.3rem;
+  }
+}
